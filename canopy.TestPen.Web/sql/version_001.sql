@@ -100,3 +100,19 @@ CREATE TABLE [dbo].[Expecteds](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
+
+--Attributes
+CREATE TABLE [dbo].[Attributes](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[RunId] [int] NOT NULL,
+	[CaseId] [int] NOT NULL,
+	[ScenarioId] [int] NOT NULL,
+	[Name] [nvarchar](max) NOT NULL,
+	[Value] [nvarchar](max) NOT NULL
+ CONSTRAINT [PK_Attributes] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO

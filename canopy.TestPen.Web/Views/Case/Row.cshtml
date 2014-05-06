@@ -5,6 +5,7 @@
     dynamic scenario = null;
     var inputs = new List<dynamic>();
     var expecteds = new List<dynamic>();
+    var attributes = new List<dynamic>();
     string pass = "";
     string fail = "";
     string skip = "";
@@ -41,7 +42,15 @@
                 {
                     expecteds.Add(e);
                 }
-            }     
+            }
+
+            foreach (var a in ViewBag.Attributes)
+            {
+                if (a.ScenarioId == scenario.Id)
+                {
+                    attributes.Add(a);
+                }
+            }
         }
     }
 }
@@ -105,24 +114,15 @@
                             <input class="form-control" value="@scenario.TestType">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="workflow" class="col-sm-2 control-label">Workflow</label>
-                        <div class="col-sm-10">
-                            <input class="form-control" value="todo dynamically add workflow applicant deal type etc">
+                    @foreach (var attribute in attributes)
+                    {
+                        <div class="form-group">
+                            <label for="workflow" class="col-sm-2 control-label">@attribute.Name</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" value="@attribute.Value">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="applicant" class="col-sm-2 control-label">Applicant</label>
-                        <div class="col-sm-10">
-                            <input class="form-control" value="">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="dealType" class="col-sm-2 control-label">Deal Type</label>
-                        <div class="col-sm-10">
-                            <input class="form-control" value="">
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
         </form>

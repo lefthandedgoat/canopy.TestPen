@@ -281,7 +281,7 @@ let getInputs case =
 [<Literal>]
 let private addExpectedsQuery = """
 INSERT INTO dbo.Expecteds
-VALUES (@RunId, @CaseId, @ScenarioId, @Input)"""
+VALUES (@RunId, @CaseId, @ScenarioId, @Expected)"""
 
 type addExpectedsQuery = SqlCommandProvider<addExpectedsQuery, connectionString>
 
@@ -289,7 +289,7 @@ let addExpecteds run caseId scenarioId (expecteds : string []) =
     let cmd = new addExpectedsQuery()    
     expecteds 
     |> Array.iter (fun expected ->
-        cmd.AsyncExecute(RunId = run, CaseId = caseId, ScenarioId = scenarioId, Input = expected) 
+        cmd.AsyncExecute(RunId = run, CaseId = caseId, ScenarioId = scenarioId, Expected = expected) 
         |> Async.RunSynchronously |> ignore)
 
 [<Literal>]
@@ -301,6 +301,36 @@ type getExpectedsQuery = SqlCommandProvider<getExpectedsQuery, connectionString>
 
 let getExpecteds case =
     let cmd = new getExpectedsQuery()
+    cmd.AsyncExecute(CaseId = case)
+    |> Async.RunSynchronously
+    |> List.ofSeq
+    
+/////////////
+//Attributes
+/////////////
+[<Literal>]
+let private addAttributesQuery = """
+INSERT INTO dbo.Attributes
+VALUES (@RunId, @CaseId, @ScenarioId, @Name, @Value)"""
+
+type addAttributesQuery = SqlCommandProvider<addAttributesQuery, connectionString>
+
+let addAttributes run caseId scenarioId (attributes : TestCases.Attribute []) =
+    let cmd = new addAttributesQuery()    
+    attributes 
+    |> Array.iter (fun attribute ->
+        cmd.AsyncExecute(RunId = run, CaseId = caseId, ScenarioId = scenarioId, Name = attribute.Case, Value = attribute.Fields.[0].Case) 
+        |> Async.RunSynchronously |> ignore)
+
+[<Literal>]
+let private getAttributesQuery = """SELECT CaseId, ScenarioId, Name, Value
+FROM [dbo].[Attributes]
+WHERE CaseId = @CaseId"""
+
+type getAttributesQuery = SqlCommandProvider<getAttributesQuery, connectionString>
+
+let getAttributes case =
+    let cmd = new getAttributesQuery()
     cmd.AsyncExecute(CaseId = case)
     |> Async.RunSynchronously
     |> List.ofSeq
