@@ -195,7 +195,16 @@
 {
     <script>
         $(document).ready(function () {
-
+            //this code controls the showing and hiding of test scenarion details
+            $(".master td:not(.status)").click(function () {
+                var next = $(this).closest(".master").next(".details");
+                if (next.is(":visible")) {
+                    next.hide();
+                } else {
+                    next.show();
+                }
+            });
+            //end comment
         });
     </script>
 }
