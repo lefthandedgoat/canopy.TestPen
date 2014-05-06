@@ -2,11 +2,7 @@ namespace canopy.TestPen.Controllers
 
 open System
 open System.IO
-open System.Collections.Generic
-open System.Linq
-open System.Web
 open System.Web.Mvc
-open System.Web.Mvc.Ajax
 open Newtonsoft.Json
 open helper
 open types

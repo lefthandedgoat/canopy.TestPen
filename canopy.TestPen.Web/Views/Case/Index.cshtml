@@ -194,17 +194,46 @@
 @section scripts
 {
     <script>
-        $(document).ready(function () {
-            //this code controls the showing and hiding of test scenarion details
-            $(".master td:not(.status)").click(function () {
-                var next = $(this).closest(".master").next(".details");
-                if (next.is(":visible")) {
-                    next.hide();
-                } else {
-                    next.show();
-                }
-            });
-            //end comment
+        $(document).ready(function() {
+            var setupShowDetailsEvent = function() {
+                $(".master td:not(.status)").click(function() {
+                    var next = $(this).closest(".master").next(".details");
+                    if (next.is(":visible")) {
+                        next.hide();
+                    } else {
+                        next.show();
+                    }
+                });
+                
+                $(".scenario-fail").click(function () {
+                    $(this).closest("tr").next(".details").show();
+                });
+            };
+
+            var setupTestScenarioPassFailSkipEvent = function(scenarios) {
+                $('.status-btn').click(function () {
+                    var scenarioId = $(this).closest("tr").data("scenarioid");
+                    var status = $(this).data("status");
+                    var button = $(this);
+                    
+                    $.ajax({
+                        url: '/Case/' + status + '/' + scenarioId,
+                        type: 'GET',
+                        success: function (result) {
+                            button.closest(".status").find("button[data-status='Pass']").removeClass("btn-success").removeClass("active");
+                            button.closest(".status").find("button[data-status='Fail']").removeClass("btn-danger").removeClass("active");
+                            button.closest(".status").find("button[data-status='Skip']").removeClass("btn-warning").removeClass("active");
+
+                            status === "Pass" ? button.closest(".status").find("button[data-status='Pass']").addClass("btn-success active") : "";
+                            status === "Fail" ? button.closest(".status").find("button[data-status='Fail']").addClass("btn-danger active") : "";
+                            status === "Skip" ? button.closest(".status").find("button[data-status='Skip']").addClass("btn-warning active") : "";
+                        }
+                    });
+                });
+            };
+
+            setupTestScenarioPassFailSkipEvent();
+            setupShowDetailsEvent();
         });
     </script>
 }

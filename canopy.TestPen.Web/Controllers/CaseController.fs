@@ -1,11 +1,7 @@
 ﻿namespace canopy.TestPen.Controllers
 
-open System
-open System.Collections.Generic
-open System.Linq
 open System.Web
 open System.Web.Mvc
-open System.Web.Mvc.Ajax
 open data
 open helper
 open types
@@ -34,3 +30,10 @@ type CaseController() =
         this.ViewData?Attributes <- data.getAttributes id
 
         this.View()
+
+    member this.Pass (id: int) = 
+        data.pass id
+    
+    member this.Fail (id: int) = data.fail id
+    
+    member this.Skip (id: int) = data.skip id

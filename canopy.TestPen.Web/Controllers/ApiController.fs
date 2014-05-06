@@ -1,10 +1,7 @@
 namespace canopy.TestPen.Controllers
 
 open System
-open System.Linq
-open System.Web
 open System.Web.Mvc
-open System.Web.Mvc.Ajax
 open data
 open FSharp.Data
 open System.IO

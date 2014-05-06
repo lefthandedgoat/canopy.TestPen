@@ -211,6 +211,24 @@ let getPFSNByCase case exceutionType =
         None = getCount "None" results
     }
 
+type passQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Pass' Where Id = @Id", connectionString>
+
+let pass (id : int) =    
+    let cmd = new passQuery()  
+    cmd.Execute(Id = id)
+
+type failQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Fail' Where Id = @Id", connectionString>
+
+let fail (id : int) =    
+    let cmd = new failQuery()  
+    cmd.Execute(Id = id)
+
+type skipQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Skip' Where Id = @Id", connectionString>
+
+let skip (id : int) =
+    let cmd = new skipQuery()
+    cmd.Execute(Id = id)
+
 /////////////
 //Scenarios
 /////////////
