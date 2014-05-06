@@ -1,0 +1,16 @@
+﻿@{
+    Layout = null;
+}
+<div id="aggregatesAndSearch" class="table-wrapper small-margin-bottom products-table section">
+    <div class="row filter-block small-margin-bottom">
+        <span class="totals counts medium-padding-left"><span class="passed">@ViewBag.PFSN.Pass</span>
+            <button type="button" class="btn btn-xs btn-success "><i class="icon-ok"></i></button>
+            <span class="failed">@ViewBag.PFSN.Fail</span>
+            <button type="button" class="btn btn-xs btn-danger "><i class="icon-remove"></i></button>
+            <span class="skipped">@ViewBag.PFSN.Skip</span>
+            <button type="button" class="btn btn-xs btn-warning "><i class="icon-asterisk"></i></button>
+            <span class="none">@ViewBag.PFSN.None</span>
+            <button type="button" class="btn btn-xs "><i class="icon-ban-circle"></i></button>
+        </span>
+    </div>
+</div>

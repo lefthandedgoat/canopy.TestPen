@@ -1,0 +1,104 @@
+﻿<div class="content">
+    @Html.Partial("~/Views/Shared/_PFSN.cshtml")
+    
+    <div id="pad-wrapper" class="less-padding">
+        <div class="panel-group">
+            <div class="panel panel-default details">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Overview
+                    </h4>
+                </div>
+                <div class="panel-collapsed">
+                    <div class="panel-body no-padding-top no-padding-bottom">
+                        <div class="table-wrapper small-margin-bottom products-table section">
+                            <div class="row">
+                                <table id="overview" class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-md-2">AREA
+                                            </th>
+                                            <th class="col-md-2">
+                                                <span class="line"></span>SECTION
+                                            </th>
+                                            <th class="col-md-3">
+                                                <span class="line"></span>PAGE
+                                            </th>
+                                            <th class="col-md-1">
+                                                <span class="line"></span>CRITICALITY
+                                            </th>
+                                            <th class="col-md-1 text-right">
+                                                <span class="line"></span><span class='text-right-padded'>
+                                                                              <button type="button" class="btn btn-xs btn-success"><i class="icon-ok"></i></button>
+                                                                              PASS</span>
+                                            </th>
+                                            <th class="col-md-1 text-right">
+                                                <span class="line"></span><span class='text-right-padded'>
+                                                                              <button type="button" class="btn btn-xs btn-danger"><i class="icon-remove"></i></button>
+                                                                              FAIL</span>
+                                            </th>
+                                            <th class="col-md-1 text-right">
+                                                <span class="line"></span><span class='text-right-padded'>
+                                                                              <button type="button" class="btn btn-xs btn-warning"><i class="icon-asterisk"></i></button>
+                                                                              SKIP</span>
+                                            </th>
+                                            <th class="col-md-1 text-right">
+                                                <span class="line"></span><span class='text-right-padded'>
+                                                                              <button type="button" class="btn btn-xs"><i class="icon-ban-circle"></i></button>
+                                                                              NONE</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var caseSummary in ViewBag.CaseSummaries)
+                                        {
+                                            <tr class="overview-row" data-caseId="@caseSummary.CaseId">
+                                                <td>
+                                                    @caseSummary.Area
+                                                </td>
+                                                <td>
+                                                    @caseSummary.Section
+                                                </td>
+                                                <td>
+                                                    @caseSummary.Name
+                                                </td>
+                                                <td>
+                                                    @caseSummary.Criticality
+                                                </td>
+                                                <td>
+                                                    <div class='text-right-padded'>@caseSummary.Pass</div>
+                                                </td>
+                                                <td>
+                                                    <div class='text-right-padded'>@caseSummary.Fail</div>
+                                                </td>
+                                                <td>
+                                                    <div class='text-right-padded'>@caseSummary.Skip</div>
+                                                </td>
+                                                <td>
+                                                    <div class='text-right-padded'>@caseSummary.None</div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@section scripts
+{
+    <script>
+        $(document).ready(function() {            
+            $("#overview").tablesorter();
+
+            $(".overview-row").click(function() {
+                var caseId = $(this).data("caseid");
+                window.location.href = "/Case/Index/" + caseId;
+            });
+        });
+    </script>
+}

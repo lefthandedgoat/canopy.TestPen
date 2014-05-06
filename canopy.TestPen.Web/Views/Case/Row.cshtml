@@ -1,0 +1,102 @@
+﻿
+@{
+    Layout = null;
+    dynamic scenario = null;
+    string pass = "";
+    string fail = "";
+    string skip = "";
+    //cant think of a better way to do this, linq isnt working for me
+    foreach (var s in ViewBag.Scenarios)
+    {
+        if (s.Id == Model)
+        {
+            scenario = s;
+            if (s.TestStatus == "Pass")
+            {
+                pass = "btn-success active";
+            }
+            if (s.TestStatus == "Fail")
+            {
+                fail = "btn-danger active";
+            }
+            if (s.TestStatus == "Skip")
+            {
+                skip = "btn-warning active";
+            }
+        }
+    }
+}
+
+<tr data-scenarioid="@scenario.Id" class="master">
+    <td class="status">
+        <button data-status="Pass" type="button" class="status-btn btn btn-xs @pass"><i class="icon-ok"></i></button>
+        <button data-status="Fail" type="button" class="scenario-fail status-btn btn btn-xs @fail"><i class="icon-remove"></i></button>
+        <button data-status="Skip" type="button" class="status-btn btn btn-xs @skip"><i class="icon-asterisk"></i></button>
+    </td>
+
+    <td class="description">@scenario.Description
+    </td>
+    <td class="caseId">@scenario.CaseId
+    </td>
+    <td class="config">@scenario.Configuration
+    </td>
+    <td class="criticality">@scenario.Criticality
+    </td>
+</tr>
+@*<tr style="display: none;" class="details">*@
+<tr class="details">
+    <td class="" colspan="5">
+        <form class="form-horizontal" role="form">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="input" class="col-sm-2 control-label">Input</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" value="todo Input and make multi select">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="expected" class="col-sm-2 control-label">Expected</label>
+                        <div class="col-sm-10">
+                            <select multiple="" class="form-control expected">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description" class="col-sm-2 control-label">Comment</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" rows="2">todo add comment to db</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="testType" class="col-sm-2 control-label">Test Type</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" value="@scenario.TestType">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="workflow" class="col-sm-2 control-label">Workflow</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" value="todo dynamically add workflow applicant deal type etc">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="applicant" class="col-sm-2 control-label">Applicant</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="dealType" class="col-sm-2 control-label">Deal Type</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" value="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </td>
+</tr>

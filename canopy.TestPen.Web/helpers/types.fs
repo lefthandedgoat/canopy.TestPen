@@ -1,0 +1,7 @@
+﻿module types
+
+open FSharp.Data
+
+type TestCases = JsonProvider<"""[{"page":{"area":{"Case":"ThirdParty","Fields":[]},"section":{"Case":"Integration","Fields":[]},"name":"Dealer Track Intergrations"},"feature":"Dealer Track Intergrations","description":"Integer fermentum at ipsum vitae pharetra","criticality":{"Case":"High","Fields":[]},"affects":["Vestibulum arcu ligula, faucibus vel volutpat id, facilisis sodales elit"],"configurations":["Proin laoreet dignissim nisl, in euismod lorem cursus vel","Morbi justo nulla, facilisis eget elementum sagittis, luctus ac lectus"],"testScenarios":[{"description":"Test","criticality":{"Case":"High","Fields":[]},"testType":{"Case":"Postive","Fields":[]},"testExecutionType":{"Case":"Manual","Fields":[]},"configuration":1,"input":["Test1","Test2"],"expected":["Yada","Yada"],"code":{"Case":"None","Fields":[]},"attributes":[{"Case":"Workflow","Fields":[{"Case":"Initial","Fields":[]}]},{"Case":"Applicant","Fields":[{"Case":"Individual","Fields":[]}]},{"Case":"DealType","Fields":[{"Case":"Manual","Fields":[]}]}]}]}]""">
+type getCasesResult = { CaseId : int; Area : string; Section : string; Name : string; Criticality : string; Pass : int; Fail : int; Skip : int; None : int }
+type getPSFNResult = { Pass : int; Fail : int; Skip : int; None : int }

@@ -1,0 +1,201 @@
+﻿@using System.Linq
+
+<div class="content">
+    @Html.Partial("~/Views/Shared/_PFSN.cshtml")
+    <div id="pad-wrapper" class="less-padding">
+        <div class="panel-group">
+            <div class="panel panel-default details">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Details
+                    </h4>
+                </div>
+                <div class="panel-collapse collapse in">
+                    <div class="panel-body no-padding-top no-padding-bottom">
+                        <div id="details" class="table-wrapper small-margin-bottom products-table section">
+                            <form class="form-horizontal" role="form">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="feature" class="col-sm-2 control-label">Feature</label>
+                                            <div class="col-sm-10">
+                                                <input class="form-control" id="feature" value="@ViewBag.Case.Feature">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="affects" class="col-sm-2 control-label">Affects</label>
+                                            <div class="col-sm-10">
+                                                <select id="affects" multiple="" class="form-control">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="description" class="col-sm-2 control-label">Description</label>
+                                            <div class="col-sm-10">
+                                                <textarea id="description" class="form-control" rows="4">@ViewBag.Case.Description</textarea>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="criticality" class="col-sm-2 control-label">Criticality</label>
+                                            <div class="col-sm-10">
+                                                <input class="form-control" id="criticality" value="@ViewBag.Case.Criticality">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="configuration" class="col-sm-2 control-label">Configurations</label>
+                                            <div class="col-sm-10">
+                                                <select multiple="" id="configurations" class="form-control">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="documentation" class="col-sm-2 control-label">Documentation</label>
+                                            <div class="col-sm-10">
+                                                <input id="documentation" type="button" data-href="" class="form-control" id="documentation" value="Go!">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-group" id="scenarios">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Manual
+                        </a>
+                        <span class="manual counts pull-right">
+                            <span class="passed">@ViewBag.ManualPFSN.Pass</span>
+                            <button data-status="Pass" type="button" class="btn btn-xs btn-success "><i class="icon-ok"></i></button>
+                            <span class="failed">@ViewBag.ManualPFSN.Fail</span>
+                            <button data-status="Fail" type="button" class="btn btn-xs btn-danger "><i class="icon-remove"></i></button>
+                            <span class="skipped">@ViewBag.ManualPFSN.Skip</span>
+                            <button data-status="Skip" type="button" class="btn btn-xs btn-warning "><i class="icon-asterisk"></i></button>
+                            <span class="none">@ViewBag.ManualPFSN.None</span>
+                            <button data-status="None" type="button" class="btn btn-xs "><i class="icon-ban-circle"></i></button>
+                        </span>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse">
+                    <div class="panel-body no-padding-top">
+                        <div id="manualTable" class="table-wrapper small-margin-bottom products-table section">
+                            <div class="row">
+                                <table class="table table-hover">
+                                    <thead>
+                                        @if (!ViewBag.Manual.IsEmpty)
+                                        {
+                                            @Html.Partial("~/Views/Case/TableHead.cshtml")
+                                        }
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in ViewBag.Manual)
+                                        {
+                                            @Html.Partial("~/Views/Case/Row.cshtml", ((int)item.Id))
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Automated
+                        </a>
+                        <span class="automated counts pull-right">
+                            <span class="passed">@ViewBag.AutomatedPFSN.Pass</span>
+                            <button data-status="Pass" type="button" class="btn btn-xs btn-success "><i class="icon-ok"></i></button>
+                            <span class="failed">@ViewBag.AutomatedPFSN.Fail</span>
+                            <button data-status="Fail" type="button" class="btn btn-xs btn-danger "><i class="icon-remove"></i></button>
+                            <span class="skipped">@ViewBag.AutomatedPFSN.Skip</span>
+                            <button data-status="Skip" type="button" class="btn btn-xs btn-warning "><i class="icon-asterisk"></i></button>
+                            <span class="none">@ViewBag.AutomatedPFSN.None</span>
+                            <button data-status="None" type="button" class="btn btn-xs "><i class="icon-ban-circle"></i></button>
+                        </span>
+                    </h4>
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse">
+                    <div class="panel-body no-padding-top">
+
+                        <div id="automatedTable" class="table-wrapper small-margin-bottom products-table section">
+
+                            <div class="row">
+                                <table class="table table-hover">
+                                    <thead>
+                                        @if (!ViewBag.Automated.IsEmpty)
+                                        {
+                                            @Html.Partial("~/Views/Case/TableHead.cshtml")
+                                        }
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in ViewBag.Automated)
+                                        {
+                                            @Html.Partial("~/Views/Case/Row.cshtml", ((int)item.Id))
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Bulk
+                        </a>
+                        <span class="bulk counts pull-right">
+                            <span class="passed">@ViewBag.BulkPFSN.Pass</span>
+                            <button data-status="Pass" type="button" class="btn btn-xs btn-success "><i class="icon-ok"></i></button>
+                            <span class="failed">@ViewBag.BulkPFSN.Fail</span>
+                            <button data-status="Fail" type="button" class="btn btn-xs btn-danger "><i class="icon-remove"></i></button>
+                            <span class="skipped">@ViewBag.BulkPFSN.Skip</span>
+                            <button data-status="Skip" type="button" class="btn btn-xs btn-warning "><i class="icon-asterisk"></i></button>
+                            <span class="none">@ViewBag.BulkPFSN.None</span>
+                            <button data-status="None" type="button" class="btn btn-xs "><i class="icon-ban-circle"></i></button>
+                        </span>
+                    </h4>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse">
+                    <div class="panel-body no-padding-top">
+                        <div id="bulkTable" class="table-wrapper small-margin-bottom products-table section">
+                            <div class="row">
+                                <table class="table table-hover">
+                                    <thead>
+                                        @if (!ViewBag.Bulk.IsEmpty)
+                                        {
+                                            @Html.Partial("~/Views/Case/TableHead.cshtml")
+                                        }
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in ViewBag.Bulk)
+                                        {
+                                            @Html.Partial("~/Views/Case/Row.cshtml", ((int)item.Id))
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+
+        });
+    </script>
+}

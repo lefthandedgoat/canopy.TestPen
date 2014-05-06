@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html><head>
+    <title>@ViewBag.Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+    @Styles.Render("~/css")
+
+    <!-- open sans font -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+    <body style="">
+
+        <!-- navbar -->
+        <header class="navbar navbar-inverse" role="banner">
+            <div class="navbar-header">
+                <button class="navbar-toggle" type="button" data-toggle="collapse" id="menu-toggler">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand">canopy Test Pen</a>
+            </div>
+
+        </header>
+        <!-- end navbar -->
+
+        <!-- sidebar -->
+        <div id="sidebar-nav" class="less-top-padding ">
+            <ul id="dashboard-menu">
+                <li>
+                    <a href="/">
+                        <i class="icon-home"></i>
+                        <span>Home</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a class="dropdown-toggle" href="#">
+                        <i class="icon-list"></i>
+                        <span>Overviews</span>
+                        <i class="icon-chevron-down"></i>
+                    </a>
+                    <ul id="overviews" class="submenu">
+                        @foreach (var run in ViewBag.Runs)
+                        {
+                            string date = run.Date.ToString("MM/dd/yy H:mm");
+                            <li>@Html.ActionLink(date, "Index", "Overview", new {Id = run.Id}, null)</li>
+                        }
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-calendar-empty"></i>
+                        <span>Calendar</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- end sidebar -->
+
+
+        <!-- main container -->
+        
+        @RenderBody()
+        
+        <!-- end main container -->
+
+        <!-- scripts -->
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+        @Scripts.Render("~/bundles/bootstrap")
+        @RenderSection("scripts", required:false)
+    
+    </body>
+</html>

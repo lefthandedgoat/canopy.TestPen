@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "canopy.TestPen.Web", "canopy.TestPen.Web\canopy.TestPen.Web.fsproj", "{C82E713B-366F-4FC5-8B79-A9767A08D743}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D489C6E2-6979-46EF-A193-AD8EE484A28B} = {D489C6E2-6979-46EF-A193-AD8EE484A28B}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{ED0A00B7-DAC7-448C-8B19-6BB43E326849}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "canopy.TestPen", "canopy.TestPen\canopy.TestPen.fsproj", "{D489C6E2-6979-46EF-A193-AD8EE484A28B}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "canopy.TestPen.Example", "canopy.TestPen.Example\canopy.TestPen.Example.fsproj", "{E6BA1D26-FED1-4514-A3AB-A8DD4DD42D57}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C82E713B-366F-4FC5-8B79-A9767A08D743}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C82E713B-366F-4FC5-8B79-A9767A08D743}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C82E713B-366F-4FC5-8B79-A9767A08D743}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C82E713B-366F-4FC5-8B79-A9767A08D743}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D489C6E2-6979-46EF-A193-AD8EE484A28B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D489C6E2-6979-46EF-A193-AD8EE484A28B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D489C6E2-6979-46EF-A193-AD8EE484A28B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D489C6E2-6979-46EF-A193-AD8EE484A28B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6BA1D26-FED1-4514-A3AB-A8DD4DD42D57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6BA1D26-FED1-4514-A3AB-A8DD4DD42D57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6BA1D26-FED1-4514-A3AB-A8DD4DD42D57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6BA1D26-FED1-4514-A3AB-A8DD4DD42D57}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
