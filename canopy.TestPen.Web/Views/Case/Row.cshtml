@@ -1,7 +1,9 @@
 ﻿
 @{
+    //todo maybe do some of this work in some funcs that I put into the viewbag?
     Layout = null;
     dynamic scenario = null;
+    var inputs = new List<dynamic>();
     string pass = "";
     string fail = "";
     string skip = "";
@@ -23,6 +25,14 @@
             {
                 skip = "btn-warning active";
             }
+
+        foreach (var i in ViewBag.Inputs)
+            {
+                if (i.ScenarioId == scenario.Id)
+                {
+                    inputs.Add(i);
+                }
+            }        
         }
     }
 }
@@ -53,7 +63,10 @@
                         <label for="input" class="col-sm-2 control-label">Input</label>
                         <div class="col-sm-10">
                             <select multiple="" class="form-control expected">
-                                <option>todo map input</option>
+                                @foreach (var input in inputs)
+                                {
+                                    <option>@input.Input</option>
+                                }
                             </select>                            
                         </div>
                     </div>

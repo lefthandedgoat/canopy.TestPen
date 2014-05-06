@@ -244,3 +244,33 @@ let getScenarios case =
     cmd.AsyncExecute(CaseId = case)
     |> Async.RunSynchronously
     |> List.ofSeq
+
+/////////////
+//Inputs
+/////////////
+[<Literal>]
+let private addInputsQuery = """
+INSERT INTO dbo.Inputs
+VALUES (@RunId, @CaseId, @ScenarioId, @Input)"""
+
+type addInputsQuery = SqlCommandProvider<addInputsQuery, connectionString>
+
+let addInputs run caseId scenarioId (inputs : string []) =
+    let cmd = new addInputsQuery()    
+    inputs 
+    |> Array.iter (fun input ->
+        cmd.AsyncExecute(RunId = run, CaseId = caseId, ScenarioId = scenarioId, Input = input) 
+        |> Async.RunSynchronously |> ignore)
+
+[<Literal>]
+let private getInputsQuery = """SELECT CaseId, ScenarioId, Input
+FROM [dbo].[Inputs]
+WHERE CaseId = @CaseId"""
+
+type getInputsQuery = SqlCommandProvider<getInputsQuery, connectionString>
+
+let getInputs case =
+    let cmd = new getInputsQuery()
+    cmd.AsyncExecute(CaseId = case)
+    |> Async.RunSynchronously
+    |> List.ofSeq

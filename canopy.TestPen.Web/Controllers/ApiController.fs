@@ -28,6 +28,7 @@ type ApiController() =
             let caseId = data.addCase run pageId tc
             tc.TestScenarios |> Array.iter (fun scenario ->
                 let scenarioId = data.addScenario run caseId scenario
+                data.addInputs run caseId scenarioId scenario.Input
                 ()
                 )
             )

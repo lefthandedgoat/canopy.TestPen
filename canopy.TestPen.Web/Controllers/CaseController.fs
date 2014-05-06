@@ -25,12 +25,10 @@ type CaseController() =
         this.ViewData?Automated <- scenarios |> List.filter(fun scenario -> scenario.TestExecutionType = "Automated")
         this.ViewData?Bulk <- scenarios |> List.filter(fun scenario -> scenario.TestExecutionType = "Bulk")
         
-        let a = getPFSNByCase case.Id "Manual"
-        let b = getPFSNByCase case.Id "Automated"
-        let c = getPFSNByCase case.Id "Bulk"
-
         this.ViewData?ManualPFSN <- getPFSNByCase case.Id "Manual"
         this.ViewData?AutomatedPFSN <- getPFSNByCase case.Id "Automated"
         this.ViewData?BulkPFSN <- getPFSNByCase case.Id "Bulk"
         
+        this.ViewData?Inputs <- data.getInputs id
+
         this.View()
