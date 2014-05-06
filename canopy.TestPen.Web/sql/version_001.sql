@@ -61,7 +61,8 @@ CREATE TABLE [dbo].[Scenarios](
 	[TestExecutionType] [nvarchar](max) NOT NULL,
 	[TestStatus] [nvarchar](max) NOT NULL,
 	[Configuration] [int] NOT NULL,
-	[Code] [bit] NOT NULL
+	[Code] [bit] NOT NULL,
+	[Comment] [nvarchar](max) NULL
  CONSTRAINT [PK_Scenarios] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

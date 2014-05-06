@@ -217,7 +217,7 @@ let getPFSNByCase case exceutionType =
 [<Literal>]
 let private addScenarioQuery = """
 INSERT INTO dbo.Scenarios
-VALUES (@RunId, @CaseId, @Description, @Criticality, @TestType, @TestExecutionType, @TestStatus, @Configuration, @Code)
+VALUES (@RunId, @CaseId, @Description, @Criticality, @TestType, @TestExecutionType, @TestStatus, @Configuration, @Code, null)
 
 SELECT SCOPE_IDENTITY()"""
 
@@ -233,7 +233,7 @@ let addScenario run caseId (scenario: TestCases.TestScenario) =
     System.Convert.ToInt32(result.Value)
 
 [<Literal>]
-let private getScenariosQuery = """SELECT Id, CaseId, Description, Criticality, TestType, TestExecutionType, TestStatus, Configuration, Code
+let private getScenariosQuery = """SELECT Id, CaseId, Description, Criticality, TestType, TestExecutionType, TestStatus, Configuration, Code, Comment
 FROM [dbo].[Scenarios]
 WHERE CaseId = @CaseId"""
 
