@@ -274,3 +274,33 @@ let getInputs case =
     cmd.AsyncExecute(CaseId = case)
     |> Async.RunSynchronously
     |> List.ofSeq
+
+/////////////
+//Expected
+/////////////
+[<Literal>]
+let private addExpectedsQuery = """
+INSERT INTO dbo.Expecteds
+VALUES (@RunId, @CaseId, @ScenarioId, @Input)"""
+
+type addExpectedsQuery = SqlCommandProvider<addExpectedsQuery, connectionString>
+
+let addExpecteds run caseId scenarioId (expecteds : string []) =
+    let cmd = new addExpectedsQuery()    
+    expecteds 
+    |> Array.iter (fun expected ->
+        cmd.AsyncExecute(RunId = run, CaseId = caseId, ScenarioId = scenarioId, Input = expected) 
+        |> Async.RunSynchronously |> ignore)
+
+[<Literal>]
+let private getExpectedsQuery = """SELECT CaseId, ScenarioId, Expected
+FROM [dbo].[Expecteds]
+WHERE CaseId = @CaseId"""
+
+type getExpectedsQuery = SqlCommandProvider<getExpectedsQuery, connectionString>
+
+let getExpecteds case =
+    let cmd = new getExpectedsQuery()
+    cmd.AsyncExecute(CaseId = case)
+    |> Async.RunSynchronously
+    |> List.ofSeq

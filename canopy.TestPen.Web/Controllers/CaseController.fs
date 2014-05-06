@@ -30,5 +30,6 @@ type CaseController() =
         this.ViewData?BulkPFSN <- getPFSNByCase case.Id "Bulk"
         
         this.ViewData?Inputs <- data.getInputs id
+        this.ViewData?Expecteds <- data.getExpecteds id
 
         this.View()

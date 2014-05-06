@@ -4,6 +4,7 @@
     Layout = null;
     dynamic scenario = null;
     var inputs = new List<dynamic>();
+    var expecteds = new List<dynamic>();
     string pass = "";
     string fail = "";
     string skip = "";
@@ -26,13 +27,21 @@
                 skip = "btn-warning active";
             }
 
-        foreach (var i in ViewBag.Inputs)
+            foreach (var i in ViewBag.Inputs)
             {
                 if (i.ScenarioId == scenario.Id)
                 {
                     inputs.Add(i);
                 }
-            }        
+            }
+
+            foreach (var e in ViewBag.Expecteds)
+            {
+                if (e.ScenarioId == scenario.Id)
+                {
+                    expecteds.Add(e);
+                }
+            }     
         }
     }
 }
@@ -74,7 +83,10 @@
                         <label for="expected" class="col-sm-2 control-label">Expected</label>
                         <div class="col-sm-10">
                             <select multiple="" class="form-control expected">
-                                <option>todo expected</option>
+                                @foreach (var expected in expecteds)
+                                {
+                                    <option>@expected.Expected</option>
+                                }
                             </select>
                         </div>
                     </div>

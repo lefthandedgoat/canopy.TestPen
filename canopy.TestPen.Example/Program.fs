@@ -38,7 +38,7 @@ let tests =
                         testExecutionType = TestExecutionType.Manual
                         configuration = 1
                         input = ["Test1 asdasf"; "Test2 ffff"]
-                        expected = [ "Yada"; "Yada" ]
+                        expected = [ "Yada 1"; "Yada 2" ]
                         attributes = 
                             [
                                 Workflow(Initial);
@@ -53,7 +53,7 @@ let tests =
                         testExecutionType = TestExecutionType.Automated
                         configuration = 1
                         input = ["Test1 aaa"; "Test2 bbbb"]
-                        expected = [ "Yada"; "Yada" ]
+                        expected = [ "Yada 3"; "Yada 4" ]
                         attributes = 
                             [
                                 Workflow(Initial);
@@ -69,7 +69,7 @@ let tests =
                         testExecutionType = TestExecutionType.Automated
                         configuration = 1
                         input = ["Test1 asdf "; "Test2 asdf"]
-                        expected = [ "Yada"; "Yada" ]
+                        expected = [ "Yada 5"; "Yada 6" ]
                         attributes = 
                             [
                                 Workflow(Initial);
@@ -85,7 +85,7 @@ let tests =
                         testExecutionType = TestExecutionType.Automated
                         configuration = 1
                         input = ["Test1f "; "Testff2"]
-                        expected = [ "Yada"; "Yada" ]
+                        expected = [ "Yada 7"; "Yada 8" ]
                         attributes = 
                             [
                                 Workflow(Initial);
@@ -101,7 +101,7 @@ let tests =
                         testExecutionType = TestExecutionType.Bulk
                         configuration = 1
                         input = ["Testasdf1"; "Testasdasdf2"]
-                        expected = [ "Yada"; "Yada" ]
+                        expected = [ "Yada 9"; "Yada 10" ]
                         attributes = 
                             [
                                 Workflow(Initial);
@@ -117,7 +117,7 @@ let tests =
                         testExecutionType = TestExecutionType.Bulk
                         configuration = 1
                         input = ["Testaaa1"; "Testfff2"]
-                        expected = [ "Yada"; "Yada" ]
+                        expected = [ "Yada 11"; "Yada 12" ]
                         attributes = 
                             [
                                 Workflow(Initial);
