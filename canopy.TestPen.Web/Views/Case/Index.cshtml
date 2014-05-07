@@ -52,6 +52,10 @@
                                             <label for="configuration" class="col-sm-2 control-label">Configurations</label>
                                             <div class="col-sm-10">
                                                 <select multiple="" id="configurations" class="form-control">
+                                                @foreach (var configuration in ViewBag.Configurations)
+                                                {
+                                                    <option>@configuration</option>
+                                                }
                                                 </select>
                                             </div>
                                         </div>
