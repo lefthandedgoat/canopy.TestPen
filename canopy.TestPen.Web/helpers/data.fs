@@ -355,3 +355,33 @@ let getAttributes case =
     cmd.AsyncExecute(CaseId = case)
     |> Async.RunSynchronously
     |> List.ofSeq
+
+/////////////
+//Affects
+/////////////
+[<Literal>]
+let private addAffectsQuery = """
+INSERT INTO dbo.Affects
+VALUES (@RunId, @CaseId, @Value)"""
+
+type addAffectsQuery = SqlCommandProvider<addAffectsQuery, connectionString>
+
+let addAffects run caseId (tc : TestCases.Root) =    
+    let cmd = new addAffectsQuery()    
+    tc.Affects
+    |> Array.iter (fun affected ->
+        cmd.AsyncExecute(RunId = run, CaseId = caseId, Value = affected ) 
+        |> Async.RunSynchronously |> ignore)
+
+[<Literal>]
+let private getAffectsQuery = """SELECT Value
+FROM [dbo].[Affects]
+WHERE CaseId = @CaseId"""
+
+type getAffectsQuery = SqlCommandProvider<getAffectsQuery, connectionString>
+
+let getAffects case =
+    let cmd = new getAffectsQuery()
+    cmd.AsyncExecute(CaseId = case)
+    |> Async.RunSynchronously
+    |> List.ofSeq
