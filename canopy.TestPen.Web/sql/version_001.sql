@@ -42,6 +42,7 @@ CREATE TABLE [dbo].[Cases](
 	[Feature] [nvarchar](max) NOT NULL,
 	[Description] [nvarchar](max) NOT NULL,
 	[Criticality] [nvarchar](max) NOT NULL,
+	[Documentation] [nvarchar](max) NOT NULL,
  CONSTRAINT [PK_Cases] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

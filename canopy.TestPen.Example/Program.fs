@@ -20,6 +20,7 @@ let tests =
             feature = "Dealer Track Intergrations"
             description = "Integer fermentum at ipsum vitae pharetra"
             criticality = High
+            documentation = "http://www.google.com"
             affects = 
                 [
                     "Vestibulum arcu ligula, faucibus vel volutpat id, facilisis sodales elit"
@@ -138,6 +139,7 @@ let tests =
             feature = "Publish Rules"
             description = "Vestibulum iaculis viverra tellus, nec ullamcorper lorem mattis vel"
             criticality = Medium
+            documentation = "http://www.google.com"
             affects = 
                 [
                     "Etiam neque est, eleifend ac erat at, luctus facilisis arcu"
@@ -180,6 +182,7 @@ let tests =
             feature = "Usury"
             description = "Vestibulum nec diam ut tortor vulputate mollis eget ut dolor"
             criticality = Low
+            documentation = "http://www.google.com"
             affects = 
                 [
                     "Suspendisse malesuada faucibus fermentum"
@@ -237,6 +240,7 @@ let tests =
             feature = "RIC"
             description = "Fusce nunc turpis, ornare ac nunc a, venenatis porta massa"
             criticality = High
+            documentation = "http://www.google.com"
             affects = 
                 [
                     "Nulla gravida massa sit amet neque fringilla, at dapibus dui gravida"
@@ -279,6 +283,7 @@ let tests =
             feature = "Report"
             description = "Fusce nunc turpis, ornare ac nunc a, venenatis porta massa"
             criticality = High
+            documentation = "http://www.google.com"
             affects = 
                 [
                     "Nulla gravida massa sit amet neque fringilla, at dapibus dui gravida"

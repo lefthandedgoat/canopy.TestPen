@@ -62,7 +62,7 @@
                                         <div class="form-group">
                                             <label for="documentation" class="col-sm-2 control-label">Documentation</label>
                                             <div class="col-sm-10">
-                                                <input id="documentation" type="button" data-href="" class="form-control" id="documentation" value="Go!">
+                                                <input id="documentation" type="button" data-href="@ViewBag.Case.Documentation" class="form-control" id="documentation" value="Go!">
                                             </div>
                                         </div>
                                     </div>
@@ -218,7 +218,7 @@
                 });
             };
 
-            var setupTestScenarioPassFailSkipEvent = function(scenarios) {
+            var setupTestScenarioPassFailSkipEvent = function() {
                 $('.status-btn').click(function () {
                     var scenarioId = $(this).closest("tr").data("scenarioid");
                     var status = $(this).data("status");
@@ -242,8 +242,15 @@
                 });
             };
 
+            var setupDocumentationClick = function() {
+                $("#documentation").click(function () {
+                    window.location.href = $(this).data("href");
+                });
+            };
+    
             setupTestScenarioPassFailSkipEvent();
             setupShowDetailsEvent();
+            setupDocumentationClick();
         });
     </script>
 }

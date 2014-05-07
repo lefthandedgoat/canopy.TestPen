@@ -127,4 +127,5 @@ type TestCase = {
     affects: string list    
     configurations: string list
     testScenarios: TestScenario list
+    documentation: string
 }

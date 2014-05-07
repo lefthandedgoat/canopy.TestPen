@@ -64,7 +64,7 @@ let addPage run (page : TestCases.Page) =
 [<Literal>]
 let private addCasesQuery = """
 INSERT INTO dbo.Cases
-VALUES (@RunId, @PageId, @Feature, @Description, @Criticality)
+VALUES (@RunId, @PageId, @Feature, @Description, @Criticality, @Documentation)
 
 SELECT SCOPE_IDENTITY()"""
 
@@ -73,7 +73,7 @@ type AddCasesQuery = SqlCommandProvider<addCasesQuery, connectionString>
 let addCase run page (case: TestCases.Root) =
     let cmd = new AddCasesQuery()    
     let result =
-        cmd.AsyncExecute(RunId = run, PageId = page, Feature = case.Feature, Description = case.Description, Criticality = case.Criticality.Case) 
+        cmd.AsyncExecute(RunId = run, PageId = page, Feature = case.Feature, Description = case.Description, Criticality = case.Criticality.Case, Documentation = case.Documentation) 
         |> Async.RunSynchronously
         |> Seq.head
     System.Convert.ToInt32(result.Value)
@@ -94,7 +94,7 @@ let getCaseSummaries run =
     |> List.ofSeq
 
 [<Literal>]
-let private getCaseByIdQuery = """SELECT Cases.Id, Cases.RunId, Feature, Description, Criticality, Area, Section, Name
+let private getCaseByIdQuery = """SELECT Cases.Id, Cases.RunId, Feature, Description, Criticality, Area, Section, Name, Documentation
 FROM dbo.Cases JOIN dbo.Pages
 ON Cases.PageId = Pages.Id
 WHERE Cases.Id = @CaseId"""
