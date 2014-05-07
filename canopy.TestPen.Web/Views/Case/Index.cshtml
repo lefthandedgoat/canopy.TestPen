@@ -218,7 +218,7 @@
                     
                     $.ajax({
                         url: '/Case/' + status + '/' + scenarioId,
-                        type: 'GET',
+                        type: 'GET', //cry I know
                         success: function (result) {
                             button.closest(".status").find("button[data-status='Pass']").removeClass("btn-success").removeClass("active");
                             button.closest(".status").find("button[data-status='Fail']").removeClass("btn-danger").removeClass("active");
@@ -227,6 +227,8 @@
                             status === "Pass" ? button.closest(".status").find("button[data-status='Pass']").addClass("btn-success active") : "";
                             status === "Fail" ? button.closest(".status").find("button[data-status='Fail']").addClass("btn-danger active") : "";
                             status === "Skip" ? button.closest(".status").find("button[data-status='Skip']").addClass("btn-warning active") : "";
+                            
+                            //todo call and get new counts for top and for the manual/automation/bulk sections
                         }
                     });
                 });

@@ -244,8 +244,10 @@ type AddScenariosQuery = SqlCommandProvider<addScenarioQuery, connectionString>
 let addScenario run caseId (scenario: TestCases.TestScenario) =
     let cmd = new AddScenariosQuery()    
     let result =
-        cmd.AsyncExecute(RunId = run, CaseId = caseId, Description = scenario.Description, Criticality = scenario.Criticality.Case, TestType = scenario.TestType.Case, TestExecutionType = scenario.TestExecutionType.Case,
-            TestStatus = "None", Configuration = scenario.Configuration, Code = not (scenario.Code.Case = "None")) 
+        let hasCode = scenario.Code.Case = "Func"
+        let testExecutionType = if scenario.Code.Case <> "Func" then "Manual" else scenario.TestType.Case
+        cmd.AsyncExecute(RunId = run, CaseId = caseId, Description = scenario.Description, Criticality = scenario.Criticality.Case, TestType = scenario.TestType.Case, TestExecutionType = testExecutionType,
+            TestStatus = "None", Configuration = scenario.Configuration, Code = hasCode) 
         |> Async.RunSynchronously
         |> Seq.head
     System.Convert.ToInt32(result.Value)
@@ -336,9 +338,10 @@ type addAttributesQuery = SqlCommandProvider<addAttributesQuery, connectionStrin
 let addAttributes run caseId scenarioId (attributes : TestCases.Attribute []) =
     let cmd = new addAttributesQuery()    
     attributes 
-    |> Array.iter (fun attribute ->
-        cmd.AsyncExecute(RunId = run, CaseId = caseId, ScenarioId = scenarioId, Name = attribute.Case, Value = attribute.Fields.[0].Case) 
-        |> Async.RunSynchronously |> ignore)
+    |> Array.iter (fun attribute ->        
+        if not <| Array.isEmpty attribute.Fields then
+            cmd.AsyncExecute(RunId = run, CaseId = caseId, ScenarioId = scenarioId, Name = attribute.Case, Value = attribute.Fields.[0].Case) 
+            |> Async.RunSynchronously |> ignore)
 
 [<Literal>]
 let private getAttributesQuery = """SELECT CaseId, ScenarioId, Name, Value

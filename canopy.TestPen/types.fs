@@ -2,6 +2,8 @@
 
 open System.Runtime.Serialization
 
+let NotApplicable = []
+
 type TestType =
     | Postive
     | Negative
@@ -17,7 +19,7 @@ type Workflow =
 
 type Applicant =
     | Individual
-    | Joint
+    | Joint    
     | None
 
 type DealType =
@@ -28,12 +30,14 @@ type DealType =
 
 type Code =
     | Func of (unit -> unit)
+    | Todo
     | None
     
 type Criticality =
     | High
     | Medium
     | Low
+    | None
     
 type TestStatus =
     | Pass
@@ -45,6 +49,7 @@ type TestExecutionType =
     | Manual
     | Bulk
     | Automated
+    | None
 
 type Area =
     | ThirdParty
@@ -56,6 +61,7 @@ type Area =
     | Underwriting
     | Wizard
     | Workflows
+    | None
 
 type Section =
     | Integration
@@ -85,6 +91,7 @@ type Section =
     | NewAppWorkflowR1
     | NewAppWorkflowMAN
     | PaymentCallWorkflow
+    | None
 
 type Attribute =
     | Workflow of Workflow
