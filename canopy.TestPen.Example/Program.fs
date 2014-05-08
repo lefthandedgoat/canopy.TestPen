@@ -39,6 +39,7 @@ let tests =
                         testExecutionType = TestExecutionType.Manual
                         configuration = 1
                         inputs = ["Test1 asdasf"; "Test2 ffff"]
+                        steps =  [ "STEPS 1"; "STEPS 2" ]
                         expected = [ "Yada 1"; "Yada 2" ]
                         attributes = 
                             [
@@ -54,6 +55,7 @@ let tests =
                         testExecutionType = TestExecutionType.Automated
                         configuration = 1
                         inputs = ["Test1 aaa"; "Test2 bbbb"]
+                        steps =  [ "STEPS 1"; "STEPS 2" ]
                         expected = [ "Yada 3"; "Yada 4" ]
                         attributes = 
                             [
@@ -70,6 +72,7 @@ let tests =
                         testExecutionType = TestExecutionType.Automated
                         configuration = 1
                         inputs = ["Test1 asdf "; "Test2 asdf"]
+                        steps =  [ "STEPS 1"; "STEPS 2" ]
                         expected = [ "Yada 5"; "Yada 6" ]
                         attributes = 
                             [
@@ -86,6 +89,7 @@ let tests =
                         testExecutionType = TestExecutionType.Automated
                         configuration = 1
                         inputs = ["Test1f "; "Testff2"]
+                        steps =  [ "STEPS 1"; "STEPS 2" ]
                         expected = [ "Yada 7"; "Yada 8" ]
                         attributes = 
                             [
@@ -102,6 +106,7 @@ let tests =
                         testExecutionType = TestExecutionType.Bulk
                         configuration = 1
                         inputs = ["Testasdf1"; "Testasdasdf2"]
+                        steps =  [ "STEPS 1"; "STEPS 2" ]
                         expected = [ "Yada 9"; "Yada 10" ]
                         attributes = 
                             [
@@ -118,6 +123,7 @@ let tests =
                         testExecutionType = TestExecutionType.Bulk
                         configuration = 1
                         inputs = ["Testaaa1"; "Testfff2"]
+                        steps =  [ "STEPS 1"; "STEPS 2" ]
                         expected = [ "Yada 11"; "Yada 12" ]
                         attributes = 
                             [
@@ -161,6 +167,7 @@ let tests =
                         testExecutionType = TestExecutionType.Automated
                         configuration = 1
                         inputs = ["Test1"; "Test2"]
+                        steps =  [ "STEPS 1"; "STEPS 2" ]
                         expected = [ "Yada"; "Yada" ]
                         attributes = 
                             [
@@ -203,6 +210,7 @@ let tests =
                         testExecutionType = TestExecutionType.Manual
                         configuration = 1
                         inputs = ["Test1"; "Test2"]
+                        steps =  [ "STEPS 1"; "STEPS 2" ]
                         expected = [ "Yada"; "Yada" ]
                         attributes = 
                             [
@@ -219,6 +227,7 @@ let tests =
                         testExecutionType = TestExecutionType.Automated
                         configuration = 1
                         inputs = ["Test1"; "Test2"]
+                        steps =  [ "STEPS 1"; "STEPS 2" ]
                         expected = [ "Yada"; "Yada" ]
                         attributes = 
                             [
@@ -261,7 +270,8 @@ let tests =
                         testType = Postive
                         testExecutionType = TestExecutionType.Automated
                         configuration = 1
-                        inputs = ["Test1"; "Test2"]
+                        inputs = ["Test1"; "Test2" ]
+                        steps =  [ "STEPS 1"; "STEPS 2" ]
                         expected = [ "Yada"; "Yada" ]
                         attributes = 
                             [
@@ -305,6 +315,7 @@ let tests =
                         testExecutionType = TestExecutionType.Manual
                         configuration = 1
                         inputs = ["Test1"; "Test2"]
+                        steps =  [ "STEPS 1"; "STEPS 2" ]
                         expected = [ "Yada"; "Yada" ]
                         attributes = 
                             [
@@ -321,6 +332,7 @@ let tests =
                         testExecutionType = TestExecutionType.Automated
                         configuration = 1
                         inputs = ["Test1"; "Test2"]
+                        steps =  [ "STEPS 1"; "STEPS 2" ]
                         expected = [ "Yada"; "Yada" ]
                         attributes = 
                             [

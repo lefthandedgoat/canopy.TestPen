@@ -415,3 +415,33 @@ let getConfigurations case =
     cmd.AsyncExecute(CaseId = case)
     |> Async.RunSynchronously
     |> List.ofSeq
+    
+/////////////
+//Steps
+/////////////
+[<Literal>]
+let private addStepsQuery = """
+INSERT INTO dbo.Steps
+VALUES (@RunId, @CaseId, @ScenarioId, @Step)"""
+
+type addStepsQuery = SqlCommandProvider<addStepsQuery, connectionString>
+
+let addSteps run caseId scenarioId (steps : string []) =
+    let cmd = new addStepsQuery()    
+    steps 
+    |> Array.iter (fun step ->
+        cmd.AsyncExecute(RunId = run, CaseId = caseId, ScenarioId = scenarioId, Step = step) 
+        |> Async.RunSynchronously |> ignore)
+
+[<Literal>]
+let private getStepsQuery = """SELECT CaseId, ScenarioId, Step
+FROM [dbo].[Steps]
+WHERE CaseId = @CaseId"""
+
+type getStepsQuery = SqlCommandProvider<getStepsQuery, connectionString>
+
+let getSteps case =
+    let cmd = new getStepsQuery()
+    cmd.AsyncExecute(CaseId = case)
+    |> Async.RunSynchronously
+    |> List.ofSeq

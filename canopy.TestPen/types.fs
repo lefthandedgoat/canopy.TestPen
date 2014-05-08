@@ -106,6 +106,7 @@ type TestScenario = {
     testExecutionType: TestExecutionType
     configuration: int
     inputs: string list
+    steps: string list
     expected: string list
     code: Code
     attributes: Attribute list

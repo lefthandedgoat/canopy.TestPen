@@ -6,6 +6,7 @@
     var inputs = new List<dynamic>();
     var expecteds = new List<dynamic>();
     var attributes = new List<dynamic>();
+    var steps = new List<dynamic>();
     string pass = "";
     string fail = "";
     string skip = "";
@@ -51,6 +52,14 @@
                     attributes.Add(a);
                 }
             }
+
+            foreach (var step in ViewBag.Steps)
+            {
+                if (step.ScenarioId == scenario.Id)
+                {
+                    steps.Add(step);
+                }
+            }
         }
     }
 }
@@ -88,6 +97,17 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label for="expected" class="col-sm-2 control-label">Steps</label>
+                        <div class="col-sm-10">
+                            <select multiple="" class="form-control expected">
+                                @foreach (var step in steps)
+                                {
+                                    <option>@step.Step</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="expected" class="col-sm-2 control-label">Expected</label>
                         <div class="col-sm-10">
                             <select multiple="" class="form-control expected">
@@ -96,12 +116,6 @@
                                     <option>@expected.Expected</option>
                                 }
                             </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="description" class="col-sm-2 control-label">Comment</label>
-                        <div class="col-sm-10">
-                            <textarea class="form-control" rows="2">@(scenario.Comment == null ? "" : @scenario.Comment.Value)</textarea>
                         </div>
                     </div>
                 </div>
@@ -122,6 +136,12 @@
                             </div>
                         </div>
                     }
+                    <div class="form-group">
+                        <label for="description" class="col-sm-2 control-label">Comment</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" rows="2">@(scenario.Comment == null ? "" : @scenario.Comment.Value)</textarea>
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>

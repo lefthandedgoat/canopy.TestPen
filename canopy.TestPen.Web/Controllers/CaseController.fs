@@ -30,6 +30,7 @@ type CaseController() =
         this.ViewData?Attributes <- data.getAttributes id
         this.ViewData?Affects <- data.getAffects id
         this.ViewData?Configurations <- data.getConfigurations id
+        this.ViewData?Steps <- data.getSteps id
 
         this.View()
 

@@ -30,8 +30,7 @@ type ApiController() =
                 data.addInputs run caseId scenarioId scenario.Inputs
                 data.addExpecteds run caseId scenarioId scenario.Expected
                 data.addAttributes run caseId scenarioId scenario.Attributes
-                ()
-                )
+                data.addSteps run caseId scenarioId scenario.Steps)
             )
                 
         this.Json(String.Empty, JsonRequestBehavior.AllowGet)
