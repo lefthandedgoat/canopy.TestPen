@@ -245,7 +245,7 @@ let addScenario run caseId (scenario: TestCases.TestScenario) =
     let cmd = new AddScenariosQuery()    
     let result =
         let hasCode = scenario.Code.Case = "Func"
-        let testExecutionType = if scenario.Code.Case <> "Func" then "Manual" else scenario.TestType.Case
+        let testExecutionType = if scenario.Code.Case <> "Func" then "Manual" else scenario.TestExecutionType.Case
         cmd.AsyncExecute(RunId = run, CaseId = caseId, Description = scenario.Description, Criticality = scenario.Criticality.Case, TestType = scenario.TestType.Case, TestExecutionType = testExecutionType,
             TestStatus = "None", Configuration = scenario.Configuration, Code = hasCode) 
         |> Async.RunSynchronously
