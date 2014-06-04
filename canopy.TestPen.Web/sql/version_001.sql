@@ -151,6 +151,7 @@ CREATE TABLE [dbo].[Steps](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[RunId] [int] NOT NULL,
 	[CaseId] [int] NOT NULL,
+	[ScenarioId] [int] NOT NULL,
 	[Value] [nvarchar](max) NOT NULL
  CONSTRAINT [PK_Steps] PRIMARY KEY CLUSTERED 
 (
