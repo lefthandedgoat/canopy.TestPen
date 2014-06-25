@@ -431,7 +431,7 @@ let addSteps run caseId scenarioId (steps : string []) =
         |> Async.RunSynchronously |> ignore)
 
 [<Literal>]
-let private getStepsQuery = """SELECT CaseId, ScenarioId, Step
+let private getStepsQuery = """SELECT CaseId, ScenarioId, Value
 FROM [dbo].[Steps]
 WHERE CaseId = @CaseId"""
 
