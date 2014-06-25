@@ -4,9 +4,6 @@ open FSharp.Data
 open helper
 open types
 
-[<Literal>]
-let connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=CanopyTestPen;Integrated Security=True"
-
 /////////////
 //Runs
 /////////////
@@ -17,7 +14,7 @@ VALUES (getdate())
 
 SELECT SCOPE_IDENTITY()"""
 
-type AddRunQuery = SqlCommandProvider<addRunQuery, connectionString>
+type AddRunQuery = SqlCommandProvider<addRunQuery, "name=TestPen">
 
 let addRun () =
     let cmd = new AddRunQuery()    
@@ -30,7 +27,7 @@ let addRun () =
 [<Literal>]
 let private getRunsQuery = """SELECT TOP 5 Id, Date FROM dbo.Runs ORDER BY ID DESC"""
 
-type GetRunsQuery = SqlCommandProvider<getRunsQuery, connectionString>
+type GetRunsQuery = SqlCommandProvider<getRunsQuery, "name=TestPen">
 
 let getRuns () =
     let cmd = new GetRunsQuery()
@@ -48,7 +45,7 @@ VALUES (@RunId, @Area, @Section, @Name)
 
 SELECT SCOPE_IDENTITY()"""
 
-type AddPageQuery = SqlCommandProvider<addPageQuery, connectionString>
+type AddPageQuery = SqlCommandProvider<addPageQuery, "name=TestPen">
 
 let addPage run (page : TestCases.Page) =
     let cmd = new AddPageQuery()    
@@ -68,7 +65,7 @@ VALUES (@RunId, @PageId, @Feature, @Description, @Criticality, @Documentation)
 
 SELECT SCOPE_IDENTITY()"""
 
-type AddCasesQuery = SqlCommandProvider<addCasesQuery, connectionString>
+type AddCasesQuery = SqlCommandProvider<addCasesQuery, "name=TestPen">
 
 let addCase run page (case: TestCases.Root) =
     let cmd = new AddCasesQuery()    
@@ -85,7 +82,7 @@ ON Cases.RunId = Pages.RunId
 AND Cases.PageId = Pages.Id
 WHERE Pages.RunId = @RunId"""
 
-type getCasesQuery = SqlCommandProvider<getCasesQuery, connectionString>
+type getCasesQuery = SqlCommandProvider<getCasesQuery, "name=TestPen">
 
 let getCaseSummaries run =
     let cmd = new getCasesQuery()
@@ -99,7 +96,7 @@ FROM dbo.Cases JOIN dbo.Pages
 ON Cases.PageId = Pages.Id
 WHERE Cases.Id = @CaseId"""
 
-type getCaseByIdQuery = SqlCommandProvider<getCaseByIdQuery, connectionString>
+type getCaseByIdQuery = SqlCommandProvider<getCaseByIdQuery, "name=TestPen">
 
 let getCaseById caseId =
     let cmd = new getCaseByIdQuery()
@@ -113,7 +110,7 @@ FROM [dbo].[Scenarios]
 WHERE RunId = @RunId
 GROUP BY CaseId, TestStatus"""
 
-type getPassFailSkipNoneQuery = SqlCommandProvider<getPassFailSkipNoneQuery, connectionString>
+type getPassFailSkipNoneQuery = SqlCommandProvider<getPassFailSkipNoneQuery, "name=TestPen">
 
 let getPassFailSkipNone run =
     let cmd = new getPassFailSkipNoneQuery()
@@ -156,7 +153,7 @@ FROM [dbo].[Scenarios]
 WHERE RunId = @RunId
 GROUP BY TestStatus"""
 
-type getPFSNHeaderQuery = SqlCommandProvider<getPFSNHeaderQuery, connectionString>
+type getPFSNHeaderQuery = SqlCommandProvider<getPFSNHeaderQuery, "name=TestPen">
 
 let getPFSNHeader run =
     let getCount status (pfskns : getPFSNHeaderQuery.Record list) = 
@@ -187,7 +184,7 @@ WHERE CaseId = @CaseId
 AND TestExecutionType = @TestExecutionType
 GROUP BY TestStatus"""
 
-type getPFSNByCaseQuery = SqlCommandProvider<getPFSNByCaseQuery, connectionString>
+type getPFSNByCaseQuery = SqlCommandProvider<getPFSNByCaseQuery, "name=TestPen">
 
 let getPFSNByCase case exceutionType =
     let getCount status (pfskns : getPFSNByCaseQuery.Record list) = 
@@ -211,19 +208,19 @@ let getPFSNByCase case exceutionType =
         None = getCount "None" results
     }
 
-type passQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Pass' Where Id = @Id", connectionString>
+type passQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Pass' Where Id = @Id", "name=TestPen">
 
 let pass (id : int) =    
     let cmd = new passQuery()  
     cmd.Execute(Id = id)
 
-type failQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Fail' Where Id = @Id", connectionString>
+type failQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Fail' Where Id = @Id", "name=TestPen">
 
 let fail (id : int) =    
     let cmd = new failQuery()  
     cmd.Execute(Id = id)
 
-type skipQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Skip' Where Id = @Id", connectionString>
+type skipQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Skip' Where Id = @Id", "name=TestPen">
 
 let skip (id : int) =
     let cmd = new skipQuery()
@@ -239,7 +236,7 @@ VALUES (@RunId, @CaseId, @Description, @Criticality, @TestType, @TestExecutionTy
 
 SELECT SCOPE_IDENTITY()"""
 
-type AddScenariosQuery = SqlCommandProvider<addScenarioQuery, connectionString>
+type AddScenariosQuery = SqlCommandProvider<addScenarioQuery, "name=TestPen">
 
 let addScenario run caseId (scenario: TestCases.TestScenario) =
     let cmd = new AddScenariosQuery()    
@@ -257,7 +254,7 @@ let private getScenariosQuery = """SELECT Id, CaseId, Description, Criticality, 
 FROM [dbo].[Scenarios]
 WHERE CaseId = @CaseId"""
 
-type getScenariosQuery = SqlCommandProvider<getScenariosQuery, connectionString>
+type getScenariosQuery = SqlCommandProvider<getScenariosQuery, "name=TestPen">
 
 let getScenarios case =
     let cmd = new getScenariosQuery()
@@ -273,7 +270,7 @@ let private addInputsQuery = """
 INSERT INTO dbo.Inputs
 VALUES (@RunId, @CaseId, @ScenarioId, @Input)"""
 
-type addInputsQuery = SqlCommandProvider<addInputsQuery, connectionString>
+type addInputsQuery = SqlCommandProvider<addInputsQuery, "name=TestPen">
 
 let addInputs run caseId scenarioId (inputs : string []) =
     let cmd = new addInputsQuery()    
@@ -287,7 +284,7 @@ let private getInputsQuery = """SELECT CaseId, ScenarioId, Input
 FROM [dbo].[Inputs]
 WHERE CaseId = @CaseId"""
 
-type getInputsQuery = SqlCommandProvider<getInputsQuery, connectionString>
+type getInputsQuery = SqlCommandProvider<getInputsQuery, "name=TestPen">
 
 let getInputs case =
     let cmd = new getInputsQuery()
@@ -303,7 +300,7 @@ let private addExpectedsQuery = """
 INSERT INTO dbo.Expecteds
 VALUES (@RunId, @CaseId, @ScenarioId, @Expected)"""
 
-type addExpectedsQuery = SqlCommandProvider<addExpectedsQuery, connectionString>
+type addExpectedsQuery = SqlCommandProvider<addExpectedsQuery, "name=TestPen">
 
 let addExpecteds run caseId scenarioId (expecteds : string []) =
     let cmd = new addExpectedsQuery()    
@@ -317,7 +314,7 @@ let private getExpectedsQuery = """SELECT CaseId, ScenarioId, Expected
 FROM [dbo].[Expecteds]
 WHERE CaseId = @CaseId"""
 
-type getExpectedsQuery = SqlCommandProvider<getExpectedsQuery, connectionString>
+type getExpectedsQuery = SqlCommandProvider<getExpectedsQuery, "name=TestPen">
 
 let getExpecteds case =
     let cmd = new getExpectedsQuery()
@@ -333,7 +330,7 @@ let private addAttributesQuery = """
 INSERT INTO dbo.Attributes
 VALUES (@RunId, @CaseId, @ScenarioId, @Name, @Value)"""
 
-type addAttributesQuery = SqlCommandProvider<addAttributesQuery, connectionString>
+type addAttributesQuery = SqlCommandProvider<addAttributesQuery, "name=TestPen">
 
 let addAttributes run caseId scenarioId (attributes : TestCases.Attribute []) =
     let cmd = new addAttributesQuery()    
@@ -348,7 +345,7 @@ let private getAttributesQuery = """SELECT CaseId, ScenarioId, Name, Value
 FROM [dbo].[Attributes]
 WHERE CaseId = @CaseId"""
 
-type getAttributesQuery = SqlCommandProvider<getAttributesQuery, connectionString>
+type getAttributesQuery = SqlCommandProvider<getAttributesQuery, "name=TestPen">
 
 let getAttributes case =
     let cmd = new getAttributesQuery()
@@ -364,7 +361,7 @@ let private addAffectsQuery = """
 INSERT INTO dbo.Affects
 VALUES (@RunId, @CaseId, @Value)"""
 
-type addAffectsQuery = SqlCommandProvider<addAffectsQuery, connectionString>
+type addAffectsQuery = SqlCommandProvider<addAffectsQuery, "name=TestPen">
 
 let addAffects run caseId (tc : TestCases.Root) =    
     let cmd = new addAffectsQuery()    
@@ -378,7 +375,7 @@ let private getAffectsQuery = """SELECT Value
 FROM [dbo].[Affects]
 WHERE CaseId = @CaseId"""
 
-type getAffectsQuery = SqlCommandProvider<getAffectsQuery, connectionString>
+type getAffectsQuery = SqlCommandProvider<getAffectsQuery, "name=TestPen">
 
 let getAffects case =
     let cmd = new getAffectsQuery()
@@ -394,7 +391,7 @@ let private addConfigurationsQuery = """
 INSERT INTO dbo.Configurations
 VALUES (@RunId, @CaseId, @Value)"""
 
-type addConfigurationsQuery = SqlCommandProvider<addConfigurationsQuery, connectionString>
+type addConfigurationsQuery = SqlCommandProvider<addConfigurationsQuery, "name=TestPen">
 
 let addConfigurations run caseId (tc : TestCases.Root) =    
     let cmd = new addConfigurationsQuery()    
@@ -408,7 +405,7 @@ let private getConfigurationsQuery = """SELECT Value
 FROM [dbo].[Configurations]
 WHERE CaseId = @CaseId"""
 
-type getConfigurationsQuery = SqlCommandProvider<getConfigurationsQuery, connectionString>
+type getConfigurationsQuery = SqlCommandProvider<getConfigurationsQuery, "name=TestPen">
 
 let getConfigurations case =
     let cmd = new getConfigurationsQuery()
@@ -424,7 +421,7 @@ let private addStepsQuery = """
 INSERT INTO dbo.Steps
 VALUES (@RunId, @CaseId, @ScenarioId, @Step)"""
 
-type addStepsQuery = SqlCommandProvider<addStepsQuery, connectionString>
+type addStepsQuery = SqlCommandProvider<addStepsQuery, "name=TestPen">
 
 let addSteps run caseId scenarioId (steps : string []) =
     let cmd = new addStepsQuery()    
@@ -438,7 +435,7 @@ let private getStepsQuery = """SELECT CaseId, ScenarioId, Step
 FROM [dbo].[Steps]
 WHERE CaseId = @CaseId"""
 
-type getStepsQuery = SqlCommandProvider<getStepsQuery, connectionString>
+type getStepsQuery = SqlCommandProvider<getStepsQuery, "name=TestPen">
 
 let getSteps case =
     let cmd = new getStepsQuery()
