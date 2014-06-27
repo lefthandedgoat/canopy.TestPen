@@ -113,20 +113,22 @@
   </ProjectExtensions>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="helpers\helper.fs" />
     <Compile Include="helpers\types.fs" />
     <Compile Include="helpers\data.fs" />
+    <Compile Include="helpers\helper.fs" />
     <Compile Include="Controllers\BaseController.fs" />
     <Compile Include="Controllers\HomeController.fs" />
     <Compile Include="Controllers\OverviewController.fs" />
     <Compile Include="Controllers\ApiController.fs" />
     <Compile Include="Controllers\CaseController.fs" />
+    <Compile Include="Controllers\ReportController.fs" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <None Include="Views\Shared\_PFSN.cshtml" />
     <Content Include="Views\Overview\Index.cshtml" />
+    <Content Include="Views\Report\Index.cshtml" />
     <Content Include="Views\Case\Index.cshtml" />
     <Content Include="Views\Case\Row.cshtml" />
     <None Include="Views\Case\TableHead.cshtml" />
@@ -142,12 +144,16 @@
     <Content Include="js\testCases.js" />
     <Content Include="js\testScenarios.js" />
     <Content Include="js\theme.js" />
+    <Content Include="js\morris.min.js" />
     <None Include="css\bootstrap-overrides.css" />
     <None Include="css\elements.css" />
     <None Include="css\font-awesome.css" />
     <None Include="css\icons.css" />
     <None Include="css\layout.css" />
     <None Include="css\tables.css" />
+    <None Include="css\bootstrap.css" />
+    <None Include="css\morris.css" />
+    <None Include="css\index.css" />
     <None Include="font\fontawesome-webfont.eot" />
     <None Include="font\fontawesome-webfont.svg" />
     <None Include="font\fontawesome-webfont.ttf" />

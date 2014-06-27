@@ -23,12 +23,14 @@ type BundleConfig() =
                         
         bundles.Add(StyleBundle("~/css").Include(
                         "~/css/bootstrap.css",
-                        "~/css/bootstrap-overrides.css",
+                        "~/css/index.css",                       
                         "~/css/layout.css",
                         "~/css/elements.css",
                         "~/css/icons.css",
                         "~/css/font-awesome.css",
-                        "~/css/tables.css"))
+                        "~/css/tables.css",
+                        "~/css/morris.css",
+                        "~/css/bootstrap-overrides.css"))
 
 /// Route for ASP.NET MVC applications
 type Route = { 

@@ -1,7 +1,6 @@
 module data
 
 open FSharp.Data
-open helper
 open types
 
 /////////////
@@ -22,7 +21,7 @@ let addRun () =
         cmd.AsyncExecute() 
         |> Async.RunSynchronously
         |> Seq.head
-    System.Convert.ToInt32(result.Value)
+    result.Value |> int
 
 [<Literal>]
 let private getRunsQuery = """SELECT TOP 5 Id, Date FROM dbo.Runs ORDER BY ID DESC"""
@@ -53,7 +52,7 @@ let addPage run (page : TestCases.Page) =
         cmd.AsyncExecute(RunId = run, Area = page.Area.Case, Section = page.Section.Case, Name = page.Name) 
         |> Async.RunSynchronously
         |> Seq.head
-    System.Convert.ToInt32(result.Value)
+    result.Value |> int
 
 /////////////
 //Cases
@@ -67,13 +66,13 @@ SELECT SCOPE_IDENTITY()"""
 
 type AddCasesQuery = SqlCommandProvider<addCasesQuery, "name=TestPen">
 
-let addCase run page (case: TestCases.Root) =
+let addCase run page (case: TestCases.Casis) =
     let cmd = new AddCasesQuery()    
     let result =
         cmd.AsyncExecute(RunId = run, PageId = page, Feature = case.Feature, Description = case.Description, Criticality = case.Criticality.Case, Documentation = case.Documentation) 
         |> Async.RunSynchronously
         |> Seq.head
-    System.Convert.ToInt32(result.Value)
+    result.Value |> int
 
 [<Literal>]
 let private getCasesQuery = """SELECT Cases.Id as CaseId, Area, Section, Name, Criticality, 0 as Pass, 0 As Fail, 0 As Skip, 0 as None
@@ -247,7 +246,7 @@ let addScenario run caseId (scenario: TestCases.TestScenario) =
             TestStatus = "None", Configuration = scenario.Configuration, Code = hasCode) 
         |> Async.RunSynchronously
         |> Seq.head
-    System.Convert.ToInt32(result.Value)
+    result.Value |> int
 
 [<Literal>]
 let private getScenariosQuery = """SELECT Id, CaseId, Description, Criticality, TestType, TestExecutionType, TestStatus, Configuration, Code, Comment
@@ -363,7 +362,7 @@ VALUES (@RunId, @CaseId, @Value)"""
 
 type addAffectsQuery = SqlCommandProvider<addAffectsQuery, "name=TestPen">
 
-let addAffects run caseId (tc : TestCases.Root) =    
+let addAffects run caseId (tc : TestCases.Casis) =    
     let cmd = new addAffectsQuery()    
     tc.Affects
     |> Array.iter (fun affected ->
@@ -393,7 +392,7 @@ VALUES (@RunId, @CaseId, @Value)"""
 
 type addConfigurationsQuery = SqlCommandProvider<addConfigurationsQuery, "name=TestPen">
 
-let addConfigurations run caseId (tc : TestCases.Root) =    
+let addConfigurations run caseId (tc : TestCases.Casis) =    
     let cmd = new addConfigurationsQuery()    
     tc.Configurations
     |> Array.iter (fun affected ->
@@ -442,3 +441,50 @@ let getSteps case =
     cmd.AsyncExecute(CaseId = case)
     |> Async.RunSynchronously
     |> List.ofSeq
+
+/////////////
+//Reports
+/////////////
+[<Literal>]
+let private addReportsQuery = """
+INSERT INTO dbo.Reports
+VALUES (@RunId, @SectionId, @Value, @Count)"""
+
+type addReportsQuery = SqlCommandProvider<addReportsQuery, "name=TestPen">
+
+let addReports run (reports : TestCases.ReportResult []) =
+    let cmd = new addReportsQuery()    
+    reports 
+    |> Array.iter (fun report ->
+        cmd.AsyncExecute(RunId = run, SectionId = report.Id, Value = report.Label, Count = report.Count) 
+        |> Async.RunSynchronously |> ignore)
+
+[<Literal>]
+let private getReportsQuery = """SELECT SectionId, Value, Count
+FROM [dbo].[Reports]
+WHERE RunId = @RunId"""
+
+type getReportsQuery = SqlCommandProvider<getReportsQuery, "name=TestPen">
+
+let getReports run =
+    let cmd = new getReportsQuery()
+    cmd.AsyncExecute(RunId = run)
+    |> Async.RunSynchronously
+    |> List.ofSeq
+
+[<Literal>]
+let private getRanQuery = """SELECT count(*)
+FROM [CanopyTestPen].[dbo].[Scenarios]
+WHERE RunId = @RunId
+AND TestStatus IN ('Pass', 'Fail')"""
+
+type getRanQuery = SqlCommandProvider<getRanQuery, "name=TestPen">
+
+let getRan run =
+    let cmd = new getRanQuery()
+    let result =
+        cmd.AsyncExecute(RunId = run)
+        |> Async.RunSynchronously
+        |> List.ofSeq
+        |> Seq.head
+    result.Value |> int

@@ -55,6 +55,20 @@
                     </ul>
                 </li>
                 <li>
+                    <a class="dropdown-toggle" href="#">
+                        <i class="icon-list"></i>
+                        <span>Reports</span>
+                        <i class="icon-chevron-down"></i>
+                    </a>
+                    <ul id="reports" class="submenu">
+                        @foreach (var run in ViewBag.Runs)
+                        {
+                            string date = run.Date.ToString("MM/dd/yy H:mm");
+                            <li>@Html.ActionLink(date, "Index", "Report", new {Id = run.Id}, null)</li>
+                        }
+                    </ul>
+                </li>
+                <li>
                     <a href="#">
                         <i class="icon-calendar-empty"></i>
                         <span>Calendar</span>

@@ -20,7 +20,7 @@ type ApiController() =
         let run = data.addRun()
         
         let testCases = read this |> TestCases.Parse                               
-        testCases |> Array.iter(fun tc -> 
+        testCases.Cases |> Array.iter(fun tc -> 
             let pageId = data.addPage run tc.Page
             let caseId = data.addCase run pageId tc
             data.addAffects run caseId tc
@@ -33,4 +33,6 @@ type ApiController() =
                 data.addSteps run caseId scenarioId scenario.Steps)
             )
                 
+        addReports run testCases.ReportResults
+
         this.Json(String.Empty, JsonRequestBehavior.AllowGet)

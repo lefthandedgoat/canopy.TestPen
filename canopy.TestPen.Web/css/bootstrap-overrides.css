@@ -385,4 +385,7 @@ table th span.line{
   }
 }
 
-
+.section {
+  margin-top: 0px;
+  padding-top: 0px;
+}

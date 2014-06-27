@@ -1,0 +1,161 @@
+﻿<div class="content">
+    <div id="pad-wrapper" class="less-padding">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Reports
+                    </h4>
+                </div>
+                <div class="panel-collapsed">
+                    <div id="main-stats">
+                        <div class="row stats-row">
+                            <div class="col-md-3 col-sm-3 stat">
+                                <div class="data">
+                                    <span class="number">@ViewBag.TotalCases</span>
+                                    cases
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 stat">
+                                <div class="data">
+                                    <span class="number">@ViewBag.TotalScenarios</span>
+                                    scenarios
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 stat">
+                                <div class="data">
+                                    <span class="number">@ViewBag.PercentAutomated %</span>
+                                    automated
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 stat last">
+                                <div class="data">
+                                    <span class="number">@ViewBag.PercentRun %</span>
+                                    run
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="main-stats">
+                        <div class="row stats-row">
+                            <div class="col-md-3 col-sm-3 stat">
+                                <div class="data">
+                                    <span class="number">@ViewBag.PercentPasssed %</span>
+                                    passed
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 stat">
+                                <div class="data">
+                                    <span class="number">@ViewBag.PercentFailed %</span>
+                                    failed
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 stat">
+                                <div class="data">
+                                    <span class="number">@ViewBag.PercentSkipped %</span>
+                                    skipped
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 stat last">
+                                <div class="data">
+                                    <span class="number">@ViewBag.PercentNone %</span>
+                                    none
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-body no-padding-bottom">
+
+                        <div class="row">
+                            <div class="col-md-6 chart">
+                                <h5>Statuses</h5>
+                                <div id="statuses" style="height: 250px;"></div>
+                            </div>
+                            <div class="col-md-6 chart">
+                                <h5>TShirt Sizes</h5>
+                                <div id="tshirtSizes" style="height: 250px;"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 chart">
+                                <h5>Test Types</h5>
+                                <div id="testTypes" style="height: 250px;"></div>
+                            </div>
+                            <div class="col-md-6 chart">
+                                <h5>Criticality</h5>
+                                <div id="criticality" style="height: 250px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@section scripts
+{
+    <script>
+        $(document).ready(function() {            
+            
+        });
+    </script>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="../../js/morris.min.js"></script>
+
+<script type="text/javascript">
+
+    // Morris Bar Chart
+    Morris.Bar({
+        element: 'statuses',
+        data: @ViewBag.Statuses,
+        xkey: 'Value',
+        ykeys: ['Count'],
+        labels: ['Count'],
+        barRatio: 0.4,
+        xLabelMargin: 10,
+        hideHover: 'auto',
+        barColors: ["#67BDF8"]
+    });
+        
+    // Morris Bar Chart
+    Morris.Bar({
+        element: 'tshirtSizes',
+        data: @ViewBag.TShirtSizes,
+        xkey: 'Value',
+        ykeys: ['Count'],
+        labels: ['Count'],
+        barRatio: 0.4,
+        xLabelMargin: 10,
+        hideHover: 'auto',
+        barColors: ["#A0E182"]
+    });
+        
+    // Morris Bar Chart
+    Morris.Bar({
+        element: 'testTypes',
+        data: @ViewBag.TestTypes,
+        xkey: 'Value',
+        ykeys: ['Count'],
+        labels: ['Count'],
+        barRatio: 0.4,
+        xLabelMargin: 10,
+        hideHover: 'auto',
+        barColors: ["#81D5D9"]
+    });
+        
+    // Morris Bar Chart
+    Morris.Bar({
+        element: 'criticality',
+        data: @ViewBag.Criticality,
+        xkey: 'Value',
+        ykeys: ['Count'],
+        labels: ['Count'],
+        barRatio: 0.4,
+        xLabelMargin: 10,
+        hideHover: 'auto',
+        barColors: ["#b85e80"]
+    });
+</script>
+}
