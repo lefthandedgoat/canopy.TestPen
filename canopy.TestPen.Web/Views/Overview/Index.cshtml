@@ -92,17 +92,31 @@
 @section scripts
 {
     <script>
-        $(document).ready(function() {            
-            //$("#overview").tablesorter();
+        $(document).ready(function() {
+            var register = function() {
+                $(".overview-row").click(function () {
+                    var caseId = $(this).data("caseid");
+                    window.location.href = "/Case/Index/" + caseId;
+                });
+            };
+
             $("#overview").dataTable({
                 "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
                 "sPaginationType": "full_numbers",
-                "iDisplayLength": 25
+                "iDisplayLength": 25,
+                "fnInitComplete": function (settings, json) {
+                    $(".overview-row").click(function () {
+                        var caseId = $(this).data("caseid");
+                        window.location.href = "/Case/Index/" + caseId;
+                    });
+                }
             });
-
-            $(".overview-row").click(function() {
-                var caseId = $(this).data("caseid");
-                window.location.href = "/Case/Index/" + caseId;
+            
+            $('#overview').on('draw.dt', function () {
+                $(".overview-row").click(function () {
+                    var caseId = $(this).data("caseid");
+                    window.location.href = "/Case/Index/" + caseId;
+                });
             });
         });
     </script>
