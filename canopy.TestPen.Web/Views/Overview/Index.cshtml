@@ -9,40 +9,40 @@
                     </h4>
                 </div>
                 <div class="panel-collapsed">
-                    <div class="panel-body no-padding-top no-padding-bottom">
-                        <div class="table-wrapper small-margin-bottom products-table section">
+                    <div class="panel-body no-padding">
+                        <div class="table-wrapper padding-left-15 padding-right-15 small-margin-bottom products-table section">
                             <div class="row">
-                                <table id="overview" class="table table-hover">
+                                <table id="overview" class="table table-hover no-padding-bottom">
                                     <thead>
                                         <tr>
-                                            <th class="col-md-2">AREA
+                                            <th class="col-md-2"><span style="padding-top: 5px">AREA</span>
                                             </th>
                                             <th class="col-md-2">
-                                                <span class="line"></span>SECTION
+                                                SECTION
                                             </th>
                                             <th class="col-md-3">
-                                                <span class="line"></span>PAGE
+                                                PAGE
                                             </th>
                                             <th class="col-md-1">
-                                                <span class="line"></span>CRITICALITY
+                                                CRITICALITY
                                             </th>
                                             <th class="col-md-1 text-right">
-                                                <span class="line"></span><span class='text-right-padded'>
+                                                <span class='text-right-padded'>
                                                                               <button type="button" class="btn btn-xs btn-success"><i class="icon-ok"></i></button>
                                                                               PASS</span>
                                             </th>
                                             <th class="col-md-1 text-right">
-                                                <span class="line"></span><span class='text-right-padded'>
+                                                <span class='text-right-padded'>
                                                                               <button type="button" class="btn btn-xs btn-danger"><i class="icon-remove"></i></button>
                                                                               FAIL</span>
                                             </th>
                                             <th class="col-md-1 text-right">
-                                                <span class="line"></span><span class='text-right-padded'>
+                                                <span class='text-right-padded'>
                                                                               <button type="button" class="btn btn-xs btn-warning"><i class="icon-asterisk"></i></button>
                                                                               SKIP</span>
                                             </th>
                                             <th class="col-md-1 text-right">
-                                                <span class="line"></span><span class='text-right-padded'>
+                                                <span class='text-right-padded'>
                                                                               <button type="button" class="btn btn-xs"><i class="icon-ban-circle"></i></button>
                                                                               NONE</span>
                                             </th>
@@ -64,17 +64,17 @@
                                                 <td>
                                                     @caseSummary.Criticality
                                                 </td>
-                                                <td>
-                                                    <div class='text-right-padded'>@caseSummary.Pass</div>
+                                                <td class='text-right-padded'>
+                                                    @caseSummary.Pass
                                                 </td>
-                                                <td>
-                                                    <div class='text-right-padded'>@caseSummary.Fail</div>
+                                                <td class='text-right-padded'>
+                                                    @caseSummary.Fail
                                                 </td>
-                                                <td>
-                                                    <div class='text-right-padded'>@caseSummary.Skip</div>
+                                                <td class='text-right-padded'>
+                                                    @caseSummary.Skip
                                                 </td>
-                                                <td>
-                                                    <div class='text-right-padded'>@caseSummary.None</div>
+                                                <td class='text-right-padded'>
+                                                    @caseSummary.None
                                                 </td>
                                             </tr>
                                         }
@@ -93,7 +93,12 @@
 {
     <script>
         $(document).ready(function() {            
-            $("#overview").tablesorter();
+            //$("#overview").tablesorter();
+            $("#overview").dataTable({
+                "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
+                "sPaginationType": "full_numbers",
+                "iDisplayLength": 25
+            });
 
             $(".overview-row").click(function() {
                 var caseId = $(this).data("caseid");

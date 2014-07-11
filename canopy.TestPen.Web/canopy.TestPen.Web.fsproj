@@ -145,6 +145,7 @@
     <Content Include="js\testScenarios.js" />
     <Content Include="js\theme.js" />
     <Content Include="js\morris.min.js" />
+    <Content Include="js\jquery.dataTables.js" />
     <None Include="css\bootstrap-overrides.css" />
     <None Include="css\elements.css" />
     <None Include="css\font-awesome.css" />
@@ -154,6 +155,7 @@
     <None Include="css\bootstrap.css" />
     <None Include="css\morris.css" />
     <None Include="css\index.css" />
+    <None Include="css\jquery.dataTables.css" />
     <None Include="font\fontawesome-webfont.eot" />
     <None Include="font\fontawesome-webfont.svg" />
     <None Include="font\fontawesome-webfont.ttf" />

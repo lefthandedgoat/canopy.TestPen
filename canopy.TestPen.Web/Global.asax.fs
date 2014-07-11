@@ -19,17 +19,19 @@ type BundleConfig() =
                         "~/js/jquery.tablesorter.min.js",
                         "~/js/bootstrap.js",
                         "~/js/theme.js",
+                        "~/js/jquery.dataTables.js",
                         "~/js/respond.js"));
                         
         bundles.Add(StyleBundle("~/css").Include(
                         "~/css/bootstrap.css",
+                        "~/css/jquery.dataTables.css",
                         "~/css/index.css",                       
                         "~/css/layout.css",
                         "~/css/elements.css",
                         "~/css/icons.css",
                         "~/css/font-awesome.css",
                         "~/css/tables.css",
-                        "~/css/morris.css",
+                        "~/css/morris.css",                        
                         "~/css/bootstrap-overrides.css"))
 
 /// Route for ASP.NET MVC applications

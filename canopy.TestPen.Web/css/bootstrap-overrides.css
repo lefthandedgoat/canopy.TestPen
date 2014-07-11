@@ -341,6 +341,18 @@ table th span.line{
 	padding-bottom: 0px;
 }
 
+.no-padding {
+	padding: 0px;
+}
+
+.padding-left-15 {
+    padding-left: 15px;
+}
+
+.padding-right-15 {
+    padding-right: 15px;
+}
+
 .table-wrapper .filter-block.small-margin-bottom {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -371,7 +383,7 @@ table th span.line{
 
 .text-right-padded {
   text-align: right;
-  padding-right: 8px;
+  padding-right: 12px;
 }
 
 #aggregatesAndSearch .search {
@@ -388,4 +400,21 @@ table th span.line{
 .section {
   margin-top: 0px;
   padding-top: 0px;
+}
+
+/* data tables override */
+#overview_wrapper {
+    margin-top: 10px;
+}
+
+#overview_length {
+    margin-left: 10px;
+}
+
+#overview_filter {
+    margin-right: 10px;
+}
+
+table.dataTable thead th {
+	padding-bottom: 5px !important;
 }
