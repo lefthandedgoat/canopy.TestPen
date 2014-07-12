@@ -20,11 +20,11 @@ type BundleConfig() =
                         "~/js/bootstrap.js",
                         "~/js/theme.js",
                         "~/js/jquery.dataTables.js",
+                        "~/js/dataTables.bootstrap.js",
                         "~/js/respond.js"));
                         
         bundles.Add(StyleBundle("~/css").Include(
                         "~/css/bootstrap.css",
-                        "~/css/jquery.dataTables.css",
                         "~/css/index.css",                       
                         "~/css/layout.css",
                         "~/css/elements.css",
@@ -32,6 +32,7 @@ type BundleConfig() =
                         "~/css/font-awesome.css",
                         "~/css/tables.css",
                         "~/css/morris.css",                        
+                        "~/css/dataTables.bootstrap.css",                        
                         "~/css/bootstrap-overrides.css"))
 
 /// Route for ASP.NET MVC applications

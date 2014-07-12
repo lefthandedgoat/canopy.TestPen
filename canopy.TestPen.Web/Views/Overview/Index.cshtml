@@ -18,33 +18,33 @@
                                             <th class="col-md-2"><span style="padding-top: 5px">AREA</span>
                                             </th>
                                             <th class="col-md-2">
-                                                SECTION
+                                                <span class="line"></span>SECTION
                                             </th>
                                             <th class="col-md-3">
-                                                PAGE
+                                                <span class="line"></span>PAGE
                                             </th>
                                             <th class="col-md-1">
-                                                CRITICALITY
+                                                <span class="line"></span>CRITICALITY
                                             </th>
                                             <th class="col-md-1 text-right">
-                                                <span class='text-right-padded'>
+                                                <span class="line"></span>
                                                                               <button type="button" class="btn btn-xs btn-success"><i class="icon-ok"></i></button>
-                                                                              PASS</span>
+                                                                              PASS
                                             </th>
                                             <th class="col-md-1 text-right">
-                                                <span class='text-right-padded'>
+                                                <span class="line"></span>
                                                                               <button type="button" class="btn btn-xs btn-danger"><i class="icon-remove"></i></button>
-                                                                              FAIL</span>
+                                                                              FAIL
                                             </th>
                                             <th class="col-md-1 text-right">
-                                                <span class='text-right-padded'>
+                                                <span class="line"></span>
                                                                               <button type="button" class="btn btn-xs btn-warning"><i class="icon-asterisk"></i></button>
-                                                                              SKIP</span>
+                                                                              SKIP
                                             </th>
                                             <th class="col-md-1 text-right">
-                                                <span class='text-right-padded'>
+                                                <span class="line"></span>
                                                                               <button type="button" class="btn btn-xs"><i class="icon-ban-circle"></i></button>
-                                                                              NONE</span>
+                                                                              NONE
                                             </th>
                                         </tr>
                                     </thead>
@@ -93,18 +93,11 @@
 {
     <script>
         $(document).ready(function() {
-            var register = function() {
-                $(".overview-row").click(function () {
-                    var caseId = $(this).data("caseid");
-                    window.location.href = "/Case/Index/" + caseId;
-                });
-            };
-
             $("#overview").dataTable({
-                "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
-                "sPaginationType": "full_numbers",
-                "iDisplayLength": 25,
-                "fnInitComplete": function (settings, json) {
+                "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]],
+                "order": [[6, 'asc']],
+                "displayLength": 25,
+                "initComplete": function (settings, json) {
                     $(".overview-row").click(function () {
                         var caseId = $(this).data("caseid");
                         window.location.href = "/Case/Index/" + caseId;
