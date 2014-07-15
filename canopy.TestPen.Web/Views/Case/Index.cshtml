@@ -212,22 +212,22 @@
                         next.show();
                     }
                 });
-                
-                $(".scenario-fail").click(function () {
+
+                $(".scenario-fail").click(function() {
                     $(this).closest("tr").next(".details").show();
                 });
             };
 
             var setupTestScenarioPassFailSkipEvent = function() {
-                $('.status-btn').click(function () {
+                $('.status-btn').click(function() {
                     var scenarioId = $(this).closest("tr").data("scenarioid");
                     var status = $(this).data("status");
                     var button = $(this);
-                    
+
                     $.ajax({
                         url: '/Case/' + status + '/' + scenarioId,
                         type: 'GET', //cry I know
-                        success: function (result) {
+                        success: function(result) {
                             button.closest(".status").find("button[data-status='Pass']").removeClass("btn-success").removeClass("active");
                             button.closest(".status").find("button[data-status='Fail']").removeClass("btn-danger").removeClass("active");
                             button.closest(".status").find("button[data-status='Skip']").removeClass("btn-warning").removeClass("active");
@@ -235,7 +235,7 @@
                             status === "Pass" ? button.closest(".status").find("button[data-status='Pass']").addClass("btn-success active") : "";
                             status === "Fail" ? button.closest(".status").find("button[data-status='Fail']").addClass("btn-danger active") : "";
                             status === "Skip" ? button.closest(".status").find("button[data-status='Skip']").addClass("btn-warning active") : "";
-                            
+
                             //todo call and get new counts for top and for the manual/automation/bulk sections
                         }
                     });
@@ -243,14 +243,40 @@
             };
 
             var setupDocumentationClick = function() {
-                $("#documentation").click(function () {
+                $("#documentation").click(function() {
                     window.location.href = $(this).data("href");
                 });
             };
-    
+
+            var setupCommentEdit = function() {
+                $(".comment").keyup(function() {
+                    $(this).closest(".comment-group").find(".save-button").removeClass("hidden");
+                });
+            };
+            
+            var setupCommentSave = function () {
+                $('.save-button').click(function () {
+                    var scenarioId = $(this).closest("tr").data("scenarioid");
+                    var comment = $(this).closest(".comment-group").find(".comment").val();
+                    var button = $(this);
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: '/Case/Comment',
+                        data: {"id": scenarioId, "comment": comment},
+                        success: function (result) {
+                            button.addClass("hidden");
+                        },
+                        dataType: "json"
+                    });
+                });
+            };
+            
             setupTestScenarioPassFailSkipEvent();
             setupShowDetailsEvent();
             setupDocumentationClick();
+            setupCommentEdit();
+            setupCommentSave();
         });
     </script>
-}
+    }

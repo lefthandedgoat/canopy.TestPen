@@ -225,6 +225,12 @@ let skip (id : int) =
     let cmd = new skipQuery()
     cmd.Execute(Id = id)
 
+type saveCommentQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set Comment = @Comment Where Id = @Id", "name=TestPen">
+
+let saveComment (id : int) (comment: string) =
+    let cmd = new saveCommentQuery()
+    cmd.Execute(Id = id, Comment = comment)
+
 /////////////
 //Scenarios
 /////////////

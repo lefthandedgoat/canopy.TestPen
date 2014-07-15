@@ -40,3 +40,6 @@ type CaseController() =
     member this.Fail (id: int) = data.fail id
     
     member this.Skip (id: int) = data.skip id
+
+    member this.Comment (id: int) (comment: string) = 
+        data.saveComment id comment

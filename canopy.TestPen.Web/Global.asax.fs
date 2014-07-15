@@ -17,12 +17,12 @@ type BundleConfig() =
 
         bundles.Add(ScriptBundle("~/bundles/bootstrap").Include(
                         "~/js/jquery.tablesorter.min.js",
-                        "~/js/bootstrap.js",
+                        //"~/js/bootstrap.js",
                         "~/js/theme.js",
                         "~/js/respond.js"));
                         
         bundles.Add(StyleBundle("~/css").Include(
-                        "~/css/bootstrap.css",
+                        //"~/css/bootstrap.css",
                         "~/css/index.css",                       
                         "~/css/layout.css",
                         "~/css/elements.css",
