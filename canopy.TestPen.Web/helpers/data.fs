@@ -131,8 +131,9 @@ let mapPassFailSkipNoneToSummaries (pfskns : getPassFailSkipNoneQuery.Record lis
           let pass = getCount "Pass" summary
           let fail = getCount "Fail" summary
           let skip = getCount "Skip" summary
-          let none = getCount "None" summary
+          let none = getCount "None" summary          
           let total = pass + fail + skip + none
+          let percent = if total = 0 then 0.0M else System.Math.Round((decimal (pass + fail)) / (decimal total) * 100M, 1)
           {
             CaseId = summary.CaseId
             Area = summary.Area
@@ -144,7 +145,7 @@ let mapPassFailSkipNoneToSummaries (pfskns : getPassFailSkipNoneQuery.Record lis
             Skip = skip
             None = none
             Total = total
-            Percent = if total = 0 then 0.0M else System.Math.Round((decimal (pass + fail)) / (decimal total) * 100M, 1)
+            Percent = percent
           }
     )
 
@@ -174,12 +175,20 @@ let getPFSNHeader run =
         cmd.AsyncExecute(RunId = run)
         |> Async.RunSynchronously
         |> List.ofSeq
-
+        
+    let pass = getCount "Pass" results
+    let fail = getCount "Fail" results
+    let skip = getCount "Skip" results
+    let none = getCount "None" results          
+    let total = pass + fail + skip + none
+    let percent = if total = 0 then 0.0M else System.Math.Round((decimal (pass + fail)) / (decimal total) * 100M, 1)
     {
-        Pass = getCount "Pass" results
-        Fail = getCount "Fail" results
-        Skip = getCount "Skip" results
-        None = getCount "None" results
+        Pass = pass
+        Fail = fail
+        Skip = skip
+        None = none
+        Total = total
+        Percent = percent
     }
         
 [<Literal>]
@@ -206,11 +215,19 @@ let getPFSNByCase case exceutionType =
         |> Async.RunSynchronously
         |> List.ofSeq
 
+    let pass = getCount "Pass" results
+    let fail = getCount "Fail" results
+    let skip = getCount "Skip" results
+    let none = getCount "None" results          
+    let total = pass + fail + skip + none
+    let percent = if total = 0 then 0.0M else System.Math.Round((decimal (pass + fail)) / (decimal total) * 100M, 1)
     {
-        Pass = getCount "Pass" results
-        Fail = getCount "Fail" results
-        Skip = getCount "Skip" results
-        None = getCount "None" results
+        Pass = pass
+        Fail = fail
+        Skip = skip
+        None = none
+        Total = total
+        Percent = percent
     }
 
 type passQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Pass' Where Id = @Id", "name=TestPen">

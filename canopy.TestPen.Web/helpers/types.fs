@@ -18,4 +18,11 @@ type getCasesResult = {
     Percent : decimal
 }
 
-type getPSFNResult = { Pass : int; Fail : int; Skip : int; None : int }
+type getPSFNResult = { 
+    Pass : int
+    Fail : int
+    Skip : int
+    None : int 
+    Total: int
+    Percent : decimal
+}
