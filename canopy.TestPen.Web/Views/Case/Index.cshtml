@@ -1,4 +1,5 @@
 ﻿@using System.Linq
+@using Microsoft.FSharp.Collections
 
 <div class="content">
     @Html.Partial("~/Views/Shared/_PFSN.cshtml")
@@ -24,12 +25,8 @@
                                         <div class="form-group">
                                             <label for="affects" class="col-sm-2 control-label">Affects</label>
                                             <div class="col-sm-10">
-                                                <select id="affects" multiple="" class="form-control">
-                                                @foreach (var affected in ViewBag.Affects)
-                                                {
-                                                    <option>@affected</option>
-                                                }
-                                                </select>
+                                                <textarea class="form-control" rows="@(ViewBag.Affects.Length + 1)">@(String.Join("\r\n", ArrayModule.OfList(ViewBag.Affects)))
+                                                </textarea>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -51,12 +48,8 @@
                                         <div class="form-group">
                                             <label for="configuration" class="col-sm-2 control-label">Configurations</label>
                                             <div class="col-sm-10">
-                                                <select multiple="" id="configurations" class="form-control">
-                                                @foreach (var configuration in ViewBag.Configurations)
-                                                {
-                                                    <option>@configuration</option>
-                                                }
-                                                </select>
+                                                <textarea class="form-control" rows="@(ViewBag.Configurations.Length + 1)">@(String.Join("\r\n", ArrayModule.OfList(ViewBag.Configurations)))
+                                                </textarea>
                                             </div>
                                         </div>
                                         <div class="form-group">
