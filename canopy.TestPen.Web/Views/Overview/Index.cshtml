@@ -20,7 +20,7 @@
                                             <th class="col-md-2">
                                                 <span class="line"></span>SECTION
                                             </th>
-                                            <th class="col-md-3">
+                                            <th class="col-md-2">
                                                 <span class="line"></span>PAGE
                                             </th>
                                             <th class="col-md-1">
@@ -45,6 +45,11 @@
                                                 <span class="line"></span><span class='text-right-padded'>
                                                                               <button type="button" class="btn btn-xs"><i class="icon-ban-circle"></i></button>
                                                                               NONE</span>
+                                            </th>
+                                            <th class="col-md-1 text-right">
+                                                <span class="line"></span><span class='text-right-padded'>
+                                                                              <button type="button" class="btn btn-xs btn-info"><i class="icon-bar-chart"></i></button>
+                                                                              PERCENT</span>
                                             </th>
                                         </tr>
                                     </thead>
@@ -75,6 +80,9 @@
                                                 </td>
                                                 <td>
                                                     <div class='text-right-padded'>@caseSummary.None</div>
+                                                </td>
+                                                <td>
+                                                    <div class='text-right-padded'>@caseSummary.Percent</div>
                                                 </td>
                                             </tr>
                                         }

@@ -128,18 +128,24 @@ let mapPassFailSkipNoneToSummaries (pfskns : getPassFailSkipNoneQuery.Record lis
 
     summaries
     |> List.map (fun summary ->
-      let i = 0
-      {
-        CaseId = summary.CaseId
-        Area = summary.Area
-        Section = summary.Section
-        Name = summary.Name
-        Criticality = summary.Criticality
-        Pass = getCount "Pass" summary
-        Fail = getCount "Fail" summary
-        Skip = getCount "Skip" summary
-        None = getCount "None" summary
-      }
+          let pass = getCount "Pass" summary
+          let fail = getCount "Fail" summary
+          let skip = getCount "Skip" summary
+          let none = getCount "None" summary
+          let total = pass + fail + skip + none
+          {
+            CaseId = summary.CaseId
+            Area = summary.Area
+            Section = summary.Section
+            Name = summary.Name
+            Criticality = summary.Criticality
+            Pass = pass
+            Fail = fail
+            Skip = skip
+            None = none
+            Total = total
+            Percent = if total = 0 then 0.0M else System.Math.Round((decimal (pass + fail)) / (decimal total) * 100M, 1)
+          }
     )
 
 /////////////
