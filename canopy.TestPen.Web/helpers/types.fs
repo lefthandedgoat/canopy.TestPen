@@ -31,4 +31,14 @@ type getReadinessBarResult = {
     Date : string
     Count : int
     RunId : int
+    Criticality : string
+}
+
+type getReadinessDataResult = {
+    Date : string    
+    RunId : int
+    Total : int
+    High : int
+    Medium : int
+    Low : int
 }

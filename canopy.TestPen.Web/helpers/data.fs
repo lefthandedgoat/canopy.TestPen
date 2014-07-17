@@ -539,24 +539,48 @@ let getPFSNReadiness run =
     |> List.ofSeq
     
 [<Literal>]
-let private getReadinessBarQuery = """SELECT
+let private getReadinessRanQuery = """SELECT
 r.Date
 ,r.Id
+,s.Criticality
 ,COUNT(*) as cnt
 FROM [CanopyTestPen].[dbo].[Scenarios] as s
 JOIN [CanopyTestPen].[dbo].[Runs]as r
 ON s.RunId = r.Id
-WHERE TestStatus = 'Pass'
+WHERE (TestStatus = 'Pass'
+OR TestStatus = 'Fail')
 AND r.Id <= @RunId
-GROUP BY r.Id, r.Date
+GROUP BY r.Id, r.Date, s.Criticality
 ORDER BY r.Id DESC"""
 
-type getReadinessBarQuery = SqlCommandProvider<getReadinessBarQuery, "name=TestPen">
+type getReadinessRanQuery = SqlCommandProvider<getReadinessRanQuery, "name=TestPen">
 
-let getReadinessBar runId =
-    let cmd = new getReadinessBarQuery()
-    cmd.AsyncExecute(RunId = runId)
-    |> Async.RunSynchronously
-    |> List.ofSeq
-    |> List.map (fun result -> { Date = System.String.Format("{0:yyyy-MM-dd}", result.Date); Count = result.cnt.Value; RunId = result.Id } )
+let getReadinessRan runId =
+    let cmd = new getReadinessRanQuery()
+    let results =
+        cmd.AsyncExecute(RunId = runId)
+        |> Async.RunSynchronously
+        |> List.ofSeq
+        |> List.map (fun result -> 
+            { 
+                Date = System.String.Format("{0:yyyy-MM-dd}", result.Date)
+                Count = result.cnt.Value
+                RunId = result.Id 
+                Criticality = result.Criticality
+            } )
+    let runIds = 
+        results 
+        |> Seq.distinctBy (fun result -> result.RunId)
+        |> Seq.map (fun result -> result.RunId)
     
+    runIds 
+    |> Seq.map (fun runId ->
+        {
+            Date = (results |> List.find (fun result -> result.RunId = runId)).Date
+            RunId = runId
+            Total = results |> List.filter (fun result -> result.RunId = runId) |> List.map (fun result -> result.Count) |> List.sum
+            High = results |> List.filter (fun result -> result.RunId = runId && result.Criticality = "High") |> List.map (fun result -> result.Count) |> List.sum
+            Medium = results |> List.filter (fun result -> result.RunId = runId && result.Criticality = "Medium") |> List.map (fun result -> result.Count) |> List.sum
+            Low = results |> List.filter (fun result -> result.RunId = runId && result.Criticality = "Low") |> List.map (fun result -> result.Count) |> List.sum
+        } )
+    |> List.ofSeq

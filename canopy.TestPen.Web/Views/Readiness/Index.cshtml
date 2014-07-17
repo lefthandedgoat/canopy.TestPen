@@ -9,13 +9,13 @@
                 <div class="panel-collapsed">
                     <div class="panel-body no-padding-bottom">
 @*                        <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-md-12">
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th class="col-lg-1">Story
+                                            <th class="col-md-1">Story
                                             </th>
-                                            <th class="col-lg-5">
+                                            <th class="col-md-5">
                                                 <span class="line"></span>Description
                                             </th>
                                         </tr>
@@ -51,26 +51,26 @@
                         </div>*@
 
                         <div class="row">
-                            <div class="col-lg-3 chart">
+                            <div class="col-md-3 chart">
                                 <h5>Total</h5>
                                 <div id="hero-donut" style="height: 250px;"></div>
                             </div>
-                            <div class="col-lg-3 chart">
+                            <div class="col-md-3 chart">
                                 <h5>High</h5>
                                 <div id="hero-donut2" style="height: 250px;"></div>
                             </div>
-                            <div class="col-lg-3 chart">
+                            <div class="col-md-3 chart">
                                 <h5>Medium</h5>
                                 <div id="hero-donut3" style="height: 250px;"></div>
                             </div>
-                            <div class="col-lg-3 chart">
+                            <div class="col-md-3 chart">
                                 <h5>Low</h5>
                                 <div id="hero-donut4" style="height: 250px;"></div>
                             </div>
                         </div>
                         <hr/>
                         <div class="row">
-                            <div class="col-lg-12 chart">
+                            <div class="col-md-12 chart">
                                 <h5>Scenarios Ran Over Time</h5>
                                 <div id="scenarios-ran-over-time"></div>
                             </div>
@@ -106,7 +106,8 @@
             { label: 'Skipped', value: @ViewBag.TotalSkip },
             { label: 'None', value: @ViewBag.TotalNone }
         ],
-        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"]
+        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"],
+        resize : true
     });
 
     Morris.Donut({
@@ -117,7 +118,8 @@
             { label: 'Skipped', value: @ViewBag.HighSkip },
             { label: 'None', value: @ViewBag.HighNone }
         ],
-        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"]
+        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"],
+        resize : true
     });
 
     Morris.Donut({
@@ -128,7 +130,8 @@
             { label: 'Skipped', value: @ViewBag.MediumSkip },
             { label: 'None', value: @ViewBag.MediumNone }
         ],
-        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"]
+        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"],
+        resize : true
     });
 
     Morris.Donut({
@@ -139,16 +142,18 @@
             { label: 'Skipped', value: @ViewBag.LowSkip },
             { label: 'None', value: @ViewBag.LowNone }
         ],
-        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"]
+        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"],
+        resize : true
     });
 
-    var datas = @Html.Raw(ViewBag.ReadinessBarData);
+    var datas = @Html.Raw(ViewBag.ReadinessRanData);
     Morris.Line({
         element: 'scenarios-ran-over-time',
         data: datas,
         xkey: 'Date',
-        ykeys: ['Count'],
-        labels: ['Passed']
+        ykeys: ['Total', 'High', 'Medium', 'Low'],
+        labels: ['Total', 'High', 'Medium', 'Low'],
+        resize : true
     });
 
 </script>

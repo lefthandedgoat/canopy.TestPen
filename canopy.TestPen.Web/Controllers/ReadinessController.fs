@@ -11,12 +11,13 @@ type ReadinessController() =
 
     member this.Index (id : int) =
         let pfsns = data.getPFSNReadiness id
+        
         let get criticality testStatus =
             let pfsn = pfsns |> List.tryFind (fun pfsn -> pfsn.Criticality = criticality && pfsn.TestStatus = testStatus)
             match pfsn with
             | Some(pfsn) -> pfsn.cnt.Value
             | _ -> 0
-                
+                                                
         this.ViewData?TotalPass <- (get "High" "Pass") + (get "Medium" "Pass") + (get "Low" "Pass")
         this.ViewData?TotalFail <- (get "High" "Fail") + (get "Medium" "Fail") + (get "Low" "Fail")
         this.ViewData?TotalSkip <- (get "High" "Skip") + (get "Medium" "Skip") + (get "Low" "Skip")
@@ -34,5 +35,5 @@ type ReadinessController() =
         this.ViewData?LowSkip <- get "Low" "Skip"
         this.ViewData?LowNone <- get "Low" "None"
         
-        this.ViewData?ReadinessBarData <- data.getReadinessBar id |> JsonConvert.SerializeObject 
+        this.ViewData?ReadinessRanData <- getReadinessRan id |> JsonConvert.SerializeObject 
         this.View()
