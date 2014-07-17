@@ -517,3 +517,23 @@ let getRan run =
         |> List.ofSeq
         |> Seq.head
     result.Value |> int
+
+/////////////
+//Readiness
+/////////////
+[<Literal>]
+let private getPFSNReadinessQuery = """SELECT
+	[Criticality]
+    ,[TestStatus]
+	,COUNT(*) as cnt
+FROM [CanopyTestPen].[dbo].[Scenarios]
+WHERE RunId = @RunId
+GROUP BY Criticality, TestStatus"""
+
+type getPFSNReadinessQuery = SqlCommandProvider<getPFSNReadinessQuery, "name=TestPen">
+
+let getPFSNReadiness run =
+    let cmd = new getPFSNReadinessQuery()
+    cmd.AsyncExecute(RunId = run)
+    |> Async.RunSynchronously
+    |> List.ofSeq
