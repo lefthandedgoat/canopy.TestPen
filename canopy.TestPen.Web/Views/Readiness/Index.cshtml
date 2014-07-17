@@ -1,0 +1,138 @@
+﻿<div class="content">
+    <div id="pad-wrapper" class="less-padding">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Stories
+                    </h4>
+                </div>
+                <div class="panel-collapsed">
+                    <div class="panel-body no-padding-bottom">
+@*                        <div class="row">
+                            <div class="col-lg-12">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-lg-1">Story
+                                            </th>
+                                            <th class="col-lg-5">
+                                                <span class="line"></span>Description
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <button type="button" class="btn btn-xs btn-danger "><i class="icon-remove"></i></button>
+                                                <span class="story">DEFI-123</span>
+                                            </td>
+                                            <td>Pricing Matrix change not updating cache
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <button type="button" class="btn btn-xs btn-danger "><i class="icon-remove"></i></button>
+                                                <span class="story">DEFI-123</span>
+                                            </td>
+                                            <td>Integrate with Daybreak - US Auto
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <button type="button" class="btn btn-xs btn-danger "><i class="icon-remove"></i></button>
+                                                <span class="story">DEFI-123</span>
+                                            </td>
+                                            <td>Add Reference fields to Megasys Legacy - AFS (SOW Signed)
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>*@
+
+                        <div class="row">
+                            <div class="col-lg-3 chart">
+                                <h5>Total</h5>
+                                <div id="hero-donut" style="height: 250px;"></div>
+                            </div>
+                            <div class="col-lg-3 chart">
+                                <h5>High</h5>
+                                <div id="hero-donut2" style="height: 250px;"></div>
+                            </div>
+                            <div class="col-lg-3 chart">
+                                <h5>Medium</h5>
+                                <div id="hero-donut3" style="height: 250px;"></div>
+                            </div>
+                            <div class="col-lg-3 chart">
+                                <h5>Low</h5>
+                                <div id="hero-donut4" style="height: 250px;"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+
+        });
+    </script>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="../../js/morris.min.js"></script>
+
+<script type="text/javascript">
+
+    // Morris Donut Chart
+    Morris.Donut({
+        element: 'hero-donut',
+        data: [
+            { label: 'Passed', value: @ViewBag.TotalPass },
+            { label: 'Failed', value: @ViewBag.TotalFail },
+            { label: 'Skipped', value: @ViewBag.TotalSkip },
+            { label: 'None', value: @ViewBag.TotalNone }
+        ],
+        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"]
+    });
+
+    Morris.Donut({
+        element: 'hero-donut2',
+        data: [
+            { label: 'Passed', value: @ViewBag.HighPass },
+            { label: 'Failed', value: @ViewBag.HighFail },
+            { label: 'Skipped', value: @ViewBag.HighSkip },
+            { label: 'None', value: @ViewBag.HighNone }
+        ],
+        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"]
+    });
+
+    Morris.Donut({
+        element: 'hero-donut3',
+        data: [
+            { label: 'Passed', value: @ViewBag.MediumPass },
+            { label: 'Failed', value: @ViewBag.MediumFail },
+            { label: 'Skipped', value: @ViewBag.MediumSkip },
+            { label: 'None', value: @ViewBag.MediumNone }
+        ],
+        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"]
+    });
+
+    Morris.Donut({
+        element: 'hero-donut4',
+        data: [
+            { label: 'Passed', value: @ViewBag.LowPass },
+            { label: 'Failed', value: @ViewBag.LowFail },
+            { label: 'Skipped', value: @ViewBag.LowSkip },
+            { label: 'None', value: @ViewBag.LowNone }
+        ],
+        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"]
+    });
+
+</script>
+}
