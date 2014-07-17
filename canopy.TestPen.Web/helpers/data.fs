@@ -584,3 +584,28 @@ let getReadinessRan runId =
             Low = results |> List.filter (fun result -> result.RunId = runId && result.Criticality = "Low") |> List.map (fun result -> result.Count) |> List.sum
         } )
     |> List.ofSeq
+
+[<Literal>]
+let private getReadinessErrorsQuery = """SELECT 
+	s.Criticality
+    ,Area
+	,Section
+	,Name
+	,s.[Description]    
+    ,ISNULL([Comment],'') as Comment
+FROM [CanopyTestPen].[dbo].[Scenarios] as s
+JOIN [CanopyTestPen].[dbo].[Cases] as c
+ON s.CaseId = c.Id
+JOIN [CanopyTestPen].[dbo].[Pages] as p
+ON c.PageId = p.Id
+WHERE s.RunId = @RunId
+AND TestStatus = 'Fail'
+"""
+
+type getReadinessErrorsQuery = SqlCommandProvider<getReadinessErrorsQuery, "name=TestPen">
+
+let getReadinessErrors runId =
+    let cmd = new getReadinessErrorsQuery()    
+    cmd.AsyncExecute(RunId = runId)
+    |> Async.RunSynchronously
+    |> List.ofSeq

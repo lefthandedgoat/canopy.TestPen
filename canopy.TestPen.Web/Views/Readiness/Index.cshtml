@@ -1,4 +1,5 @@
-﻿<div class="content">
+﻿@using Microsoft.FSharp.Collections
+<div class="content">
     <div id="pad-wrapper" class="less-padding">
         <div class="panel-group">
             <div class="panel panel-default">
@@ -75,8 +76,71 @@
                                 <div id="scenarios-ran-over-time"></div>
                             </div>
                         </div>
-
+                        <hr/>
                         <div class="row">
+                            
+                            <div class="col-md-12">
+                                <h5>Failed</h5>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-md-1">Criticality
+                                            </th>
+                                            <th class="col-md-1"><span class="line"></span>Area
+                                            </th>
+                                            <th class="col-md-1"><span class="line"></span>Page
+                                            </th>
+                                            <th class="col-md-2"><span class="line"></span>Section
+                                            </th>
+                                            <th class="col-md-3">
+                                                <span class="line"></span>Description
+                                            </th>
+                                            <th class="col-md-4">
+                                                <span class="line"></span>Comment
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                       @if (ListModule.IsEmpty(ViewBag.ReadinessErrors))
+                                       {
+                                           <tr class="danger">
+                                               <td>None
+                                               </td>
+                                               <td>
+                                               </td>
+                                               <td>
+                                               </td>
+                                               <td>
+                                               </td>
+                                               <td></td>
+                                               <td></td>
+                                           </tr>
+                                       }
+                                       else
+                                       {
+                                           foreach (var error in ViewBag.ReadinessErrors)
+                                           {
+                                                <tr class="danger">
+                                                    <td>@error.Criticality
+                                                    </td>
+                                                    <td>@error.Area
+                                                    </td>
+                                                    <td>@error.Section
+                                                    </td>
+                                                    <td>@error.Name
+                                                    </td>
+                                                    <td>@error.Description
+                                                    </td>
+                                                    <td>@error.Comment
+                                                    </td>
+                                                </tr>
+  
+                                           }
+                                       }
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
