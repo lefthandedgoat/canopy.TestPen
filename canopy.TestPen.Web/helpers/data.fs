@@ -537,3 +537,26 @@ let getPFSNReadiness run =
     cmd.AsyncExecute(RunId = run)
     |> Async.RunSynchronously
     |> List.ofSeq
+    
+[<Literal>]
+let private getReadinessBarQuery = """SELECT
+r.Date
+,r.Id
+,COUNT(*) as cnt
+FROM [CanopyTestPen].[dbo].[Scenarios] as s
+JOIN [CanopyTestPen].[dbo].[Runs]as r
+ON s.RunId = r.Id
+WHERE TestStatus = 'Pass'
+AND r.Id <= @RunId
+GROUP BY r.Id, r.Date
+ORDER BY r.Id DESC"""
+
+type getReadinessBarQuery = SqlCommandProvider<getReadinessBarQuery, "name=TestPen">
+
+let getReadinessBar runId =
+    let cmd = new getReadinessBarQuery()
+    cmd.AsyncExecute(RunId = runId)
+    |> Async.RunSynchronously
+    |> List.ofSeq
+    |> List.map (fun result -> { Date = System.String.Format("{0:yyyy-MM-dd}", result.Date); Count = result.cnt.Value; RunId = result.Id } )
+    

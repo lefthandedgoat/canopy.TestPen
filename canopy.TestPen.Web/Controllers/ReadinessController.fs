@@ -4,6 +4,7 @@ open System.Web.Mvc
 open data
 open helper
 open types
+open Newtonsoft.Json
 
 type ReadinessController() =
     inherit BaseController()
@@ -32,4 +33,6 @@ type ReadinessController() =
         this.ViewData?LowFail <- get "Low" "Fail"
         this.ViewData?LowSkip <- get "Low" "Skip"
         this.ViewData?LowNone <- get "Low" "None"
+        
+        this.ViewData?ReadinessBarData <- data.getReadinessBar id |> JsonConvert.SerializeObject 
         this.View()

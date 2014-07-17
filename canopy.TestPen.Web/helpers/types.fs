@@ -26,3 +26,9 @@ type getPSFNResult = {
     Total: int
     Percent : decimal
 }
+
+type getReadinessBarResult = {
+    Date : string
+    Count : int
+    RunId : int
+}
