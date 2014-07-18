@@ -9,7 +9,7 @@ open types
 [<Literal>]
 let private addRunQuery = """
 INSERT INTO dbo.Runs
-VALUES (getdate())
+VALUES (getdate(), 1)
 
 SELECT SCOPE_IDENTITY()"""
 
@@ -24,7 +24,11 @@ let addRun () =
     result.Value |> int
 
 [<Literal>]
-let private getRunsQuery = """SELECT TOP 5 Id, Date FROM dbo.Runs ORDER BY ID DESC"""
+let private getRunsQuery = """
+SELECT TOP 5 Id, Date 
+FROM dbo.Runs
+WHERE IsActive = 1
+ORDER BY ID DESC"""
 
 type GetRunsQuery = SqlCommandProvider<getRunsQuery, "name=TestPen">
 
@@ -230,27 +234,27 @@ let getPFSNByCase case exceutionType =
         Percent = percent
     }
 
-type passQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Pass' Where Id = @Id", "name=TestPen">
+type passQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Pass', TestedBy = @User Where Id = @Id", "name=TestPen">
 
-let pass (id : int) =    
+let pass id user =    
     let cmd = new passQuery()  
-    cmd.Execute(Id = id)
+    cmd.Execute(Id = id, User = user)
 
-type failQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Fail' Where Id = @Id", "name=TestPen">
+type failQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Fail', TestedBy = @User Where Id = @Id", "name=TestPen">
 
-let fail (id : int) =    
+let fail id user =    
     let cmd = new failQuery()  
-    cmd.Execute(Id = id)
+    cmd.Execute(Id = id, User = user)
 
-type skipQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Skip' Where Id = @Id", "name=TestPen">
+type skipQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Skip', TestedBy = @User Where Id = @Id", "name=TestPen">
 
-let skip (id : int) =
+let skip id user =
     let cmd = new skipQuery()
-    cmd.Execute(Id = id)
+    cmd.Execute(Id = id, User = user)
 
 type saveCommentQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set Comment = @Comment Where Id = @Id", "name=TestPen">
 
-let saveComment (id : int) (comment: string) =
+let saveComment id comment =
     let cmd = new saveCommentQuery()
     cmd.Execute(Id = id, Comment = comment)
 
@@ -260,7 +264,7 @@ let saveComment (id : int) (comment: string) =
 [<Literal>]
 let private addScenarioQuery = """
 INSERT INTO dbo.Scenarios
-VALUES (@RunId, @CaseId, @Description, @Criticality, @TestType, @TestExecutionType, @TestStatus, @Configuration, @Code, null)
+VALUES (@RunId, @CaseId, @Description, @Criticality, @TestType, @TestExecutionType, @TestStatus, @Configuration, @Code, null, null)
 
 SELECT SCOPE_IDENTITY()"""
 
@@ -278,7 +282,7 @@ let addScenario run caseId (scenario: TestCases.TestScenario) =
     result.Value |> int
 
 [<Literal>]
-let private getScenariosQuery = """SELECT Id, CaseId, Description, Criticality, TestType, TestExecutionType, TestStatus, Configuration, Code, Comment
+let private getScenariosQuery = """SELECT Id, CaseId, Description, Criticality, TestType, TestExecutionType, TestStatus, Configuration, Code, Comment, TestedBy
 FROM [dbo].[Scenarios]
 WHERE CaseId = @CaseId"""
 
@@ -550,6 +554,7 @@ ON s.RunId = r.Id
 WHERE (TestStatus = 'Pass'
 OR TestStatus = 'Fail')
 AND r.Id <= @RunId
+AND r.IsActive = 1
 GROUP BY r.Id, r.Date, s.Criticality
 ORDER BY r.Id DESC"""
 

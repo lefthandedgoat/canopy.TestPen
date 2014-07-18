@@ -9,10 +9,11 @@ open types
 type CaseController() =
     inherit BaseController()
     
-    member this.Index (id : int) =
-        let case = data.getCaseById id
-        let scenarios = data.getScenarios case.Id
+    member this.user = (this.User.Identity.Name.Split [| '\\' |]).[1]
 
+    member this.Index (id : int) =        
+        let case = data.getCaseById id
+        let scenarios = data.getScenarios case.Id        
         this.ViewData?Case <- case
         this.ViewData?Scenarios <- scenarios
         this.ViewData?PFSN <- data.getPFSNHeader case.RunId        
@@ -34,12 +35,10 @@ type CaseController() =
 
         this.View()
 
-    member this.Pass (id: int) = 
-        data.pass id
+    member this.Pass id = data.pass id this.user
     
-    member this.Fail (id: int) = data.fail id
+    member this.Fail id = data.fail id this.user
     
-    member this.Skip (id: int) = data.skip id
+    member this.Skip id = data.skip id this.user
 
-    member this.Comment (id: int) (comment: string) = 
-        data.saveComment id comment
+    member this.Comment id comment = data.saveComment id (sprintf "%s- %s" this.user comment)

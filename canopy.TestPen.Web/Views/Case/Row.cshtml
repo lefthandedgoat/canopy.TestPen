@@ -78,6 +78,12 @@
     </td>
     <td class="criticality">@scenario.Criticality
     </td>
+    <td class="criticality">
+        @if (scenario.TestedBy != null)
+        {
+            <span>@scenario.TestedBy.Value</span>
+        }
+    </td>
 </tr>
 <tr style="display: none;" data-scenarioid="@scenario.Id" class="details">
     <td class="" colspan="5">

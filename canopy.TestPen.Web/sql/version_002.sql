@@ -20,3 +20,12 @@ CREATE TABLE [dbo].[Stories](
 ) ON [PRIMARY] 
 
 GO
+
+--Add TestedBy to Scenarios
+ALTER TABLE Scenarios ADD TestedBy VARCHAR(100)
+
+--IsActive to Runs
+ALTER TABLE Runs ADD IsActive BIT NOT NULL DEFAULT 1
+
+--ClaimedBy to Case
+ALTER TABLE Cases ADD ClaimedBy VARCHAR(100)
