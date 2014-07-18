@@ -35,13 +35,15 @@ type BaseController() =
     inherit Controller()
     //http://stackoverflow.com/questions/8149127/set-a-property-on-viewbag-dynamic-object-in-f
         
+    member this.user = (this.User.Identity.Name.Split [| '\\' |]).[1]
+
     override x.Initialize(ctx) =
         base.Initialize(ctx)
         x.ViewData?Runs <- data.getRuns()
+        x.ViewData?User <- x.user
         ()
 
-    override x.Json(data, contentType, contentEncoding, behavior) =               
-        
+    override x.Json(data, contentType, contentEncoding, behavior) =                       
         let result = JsonNetResult()
         result.Data <- data
         result.ContentType <- contentType

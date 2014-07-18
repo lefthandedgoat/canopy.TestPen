@@ -15,7 +15,9 @@
                                 <table id="overview" class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th class="col-md-2">AREA
+                                            <th class="col-md-1">CLAIM
+                                            </th>
+                                            <th class="col-md-1">AREA
                                             </th>
                                             <th class="col-md-2">
                                                 <span class="line"></span>SECTION
@@ -57,6 +59,23 @@
                                         @foreach (var caseSummary in ViewBag.CaseSummaries)
                                         {
                                             <tr class="overview-row" data-caseId="@caseSummary.CaseId">
+                                                <td class="no-click-to-case">
+                                                    @if (caseSummary.ClaimedBy == null)
+                                                    {
+                                                        <button type="button" class="btn btn-xs btn-default claim">Claim</button>
+                                                        <button type="button" class="hidden btn btn-xs btn-default btn-danger claimed-you"> You </button>
+                                                    }
+                                                    else if (caseSummary.ClaimedBy.Value == ViewBag.User)
+                                                    {
+                                                        <button type="button" class="btn btn-xs btn-default btn-danger claimed-you"> You </button>
+                                                        <button type="button" class="hidden btn btn-xs btn-default claim">Claim</button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button type="button" class="btn btn-xs btn-default btn-primary">@caseSummary.ClaimedBy.Value</button>
+                                                    }
+                                                    
+                                                </td>
                                                 <td>
                                                     @caseSummary.Area
                                                 </td>
@@ -103,9 +122,39 @@
         $(document).ready(function() {            
             $("#overview").tablesorter();
 
-            $(".overview-row").click(function() {
-                var caseId = $(this).data("caseid");
+            $(".overview-row td:not(.no-click-to-case)").click(function () {
+                var caseId = $(this).closest("tr").data("caseid");
                 window.location.href = "/Case/Index/" + caseId;
+            });
+            
+            $(".claim").click(function () {
+                var caseId = $(this).closest("tr").data("caseid");
+                var button = $(this);
+                $.ajax({
+                    type: "POST",
+                    url: '/Case/Claim',
+                    data: { "id": caseId },
+                    success: function (result) {
+                        button.addClass("hidden");
+                        button.closest("td").find(".claimed-you").removeClass("hidden");
+                    },
+                    dataType: "json"
+                });
+            });
+
+            $(".claimed-you").click(function () {
+                var caseId = $(this).closest("tr").data("caseid");
+                var button = $(this);
+                $.ajax({
+                    type: "POST",
+                    url: '/Case/Unclaim',
+                    data: { "id": caseId },
+                    success: function (result) {
+                        button.addClass("hidden");
+                        button.closest("td").find(".claim").removeClass("hidden");
+                    },
+                    dataType: "json"
+                });
             });
         });
     </script>

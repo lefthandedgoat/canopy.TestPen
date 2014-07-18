@@ -64,7 +64,7 @@ let addPage run (page : TestCases.Page) =
 [<Literal>]
 let private addCasesQuery = """
 INSERT INTO dbo.Cases
-VALUES (@RunId, @PageId, @Feature, @Description, @Criticality, @Documentation)
+VALUES (@RunId, @PageId, @Feature, @Description, @Criticality, @Documentation, null)
 
 SELECT SCOPE_IDENTITY()"""
 
@@ -79,7 +79,7 @@ let addCase run page (case: TestCases.Casis) =
     result.Value |> int
 
 [<Literal>]
-let private getCasesQuery = """SELECT Cases.Id as CaseId, Area, Section, Name, Criticality, 0 as Pass, 0 As Fail, 0 As Skip, 0 as None
+let private getCasesQuery = """SELECT ClaimedBy, Cases.Id as CaseId, Area, Section, Name, Criticality, 0 as Pass, 0 As Fail, 0 As Skip, 0 as None
 FROM dbo.Pages JOIN dbo.Cases
 ON Cases.RunId = Pages.RunId 
 AND Cases.PageId = Pages.Id
@@ -139,6 +139,7 @@ let mapPassFailSkipNoneToSummaries (pfskns : getPassFailSkipNoneQuery.Record lis
           let total = pass + fail + skip + none
           let percent = if total = 0 then 0.0M else System.Math.Round((decimal (pass + fail)) / (decimal total) * 100M, 1)
           {
+            ClaimedBy = summary.ClaimedBy
             CaseId = summary.CaseId
             Area = summary.Area
             Section = summary.Section
@@ -293,6 +294,18 @@ let getScenarios case =
     cmd.AsyncExecute(CaseId = case)
     |> Async.RunSynchronously
     |> List.ofSeq
+
+type claimQuery = SqlCommandProvider<"Update [dbo].[Cases] Set ClaimedBy = @User Where Id = @Id AND ClaimedBy IS NULL", "name=TestPen">
+
+let claim id user =
+    let cmd = new claimQuery()
+    cmd.Execute(Id = id, User = user)
+
+type unclaimQuery = SqlCommandProvider<"Update [dbo].[Cases] Set ClaimedBy = null Where Id = @Id", "name=TestPen">
+
+let unclaim id =
+    let cmd = new unclaimQuery()
+    cmd.Execute(Id = id)
 
 /////////////
 //Inputs

@@ -9,8 +9,6 @@ open types
 type CaseController() =
     inherit BaseController()
     
-    member this.user = (this.User.Identity.Name.Split [| '\\' |]).[1]
-
     member this.Index (id : int) =        
         let case = data.getCaseById id
         let scenarios = data.getScenarios case.Id        
@@ -42,3 +40,7 @@ type CaseController() =
     member this.Skip id = data.skip id this.user
 
     member this.Comment id comment = data.saveComment id (sprintf "%s- %s" this.user comment)
+
+    member this.Claim id = data.claim id this.user
+    
+    member this.Unclaim id = data.unclaim id
