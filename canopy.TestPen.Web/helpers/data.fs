@@ -235,19 +235,19 @@ let getPFSNByCase case exceutionType =
         Percent = percent
     }
 
-type passQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Pass', TestedBy = @User Where Id = @Id", "name=TestPen">
+type passQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Pass', TestedBy = @User, UpdateDate = getdate() Where Id = @Id", "name=TestPen">
 
 let pass id user =    
     let cmd = new passQuery()  
     cmd.Execute(Id = id, User = user)
 
-type failQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Fail', TestedBy = @User Where Id = @Id", "name=TestPen">
+type failQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Fail', TestedBy = @User, UpdateDate = getdate() Where Id = @Id", "name=TestPen">
 
 let fail id user =    
     let cmd = new failQuery()  
     cmd.Execute(Id = id, User = user)
 
-type skipQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Skip', TestedBy = @User Where Id = @Id", "name=TestPen">
+type skipQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Skip', TestedBy = @User, UpdateDate = getdate() Where Id = @Id", "name=TestPen">
 
 let skip id user =
     let cmd = new skipQuery()
@@ -265,7 +265,7 @@ let saveComment id comment =
 [<Literal>]
 let private addScenarioQuery = """
 INSERT INTO dbo.Scenarios
-VALUES (@RunId, @CaseId, @Description, @Criticality, @TestType, @TestExecutionType, @TestStatus, @Configuration, @Code, null, null)
+VALUES (@RunId, @CaseId, @Description, @Criticality, @TestType, @TestExecutionType, @TestStatus, @Configuration, @Code, null, null, null)
 
 SELECT SCOPE_IDENTITY()"""
 
@@ -628,3 +628,25 @@ let getReadinessErrors runId =
     cmd.AsyncExecute(RunId = runId)
     |> Async.RunSynchronously
     |> List.ofSeq
+
+let queryForlater = """
+SELECT
+CAST(s.UpdateDate AS DATE) as UpdateDate
+,r.Id
+,s.Criticality
+,s.TestedBy
+,COUNT(*) as cnt
+FROM [CanopyTestPen].[dbo].[Scenarios] as s
+JOIN [CanopyTestPen].[dbo].[Runs]as r
+ON s.RunId = r.Id
+WHERE (TestStatus = 'Pass'
+OR TestStatus = 'Fail')
+AND r.Id = 12
+AND r.IsActive = 1
+AND s.TestedBy IS NOT NULL
+AND s.UpdateDate IS NOT NULL
+GROUP BY r.Id, CAST(s.UpdateDate AS DATE), s.Criticality, s.TestedBy
+ORDER BY r.Id DESC
+
+
+"""
