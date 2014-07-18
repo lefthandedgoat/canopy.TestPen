@@ -84,6 +84,8 @@
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
+                                            <th class="col-md-1">Tested By
+                                            </th>
                                             <th class="col-md-1">Criticality
                                             </th>
                                             <th class="col-md-1"><span class="line"></span>Area
@@ -114,6 +116,7 @@
                                                </td>
                                                <td></td>
                                                <td></td>
+                                               <td></td>
                                            </tr>
                                        }
                                        else
@@ -121,6 +124,12 @@
                                            foreach (var error in ViewBag.ReadinessErrors)
                                            {
                                                 <tr class="danger">
+                                                    <td>
+                                                    @if (error.TestedBy != null)
+                                                    {
+                                                        <span>@error.TestedBy.Value</span>
+                                                    }
+                                                    </td>
                                                     <td>@error.Criticality
                                                     </td>
                                                     <td>@error.Area

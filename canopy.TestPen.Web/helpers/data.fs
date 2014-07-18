@@ -605,7 +605,8 @@ let getReadinessRan runId =
 
 [<Literal>]
 let private getReadinessErrorsQuery = """SELECT 
-	s.Criticality
+	s.TestedBy
+    ,s.Criticality
     ,Area
 	,Section
 	,Name
