@@ -201,49 +201,53 @@
     Morris.Donut({
         element: 'hero-donut',
         data: [
-            { label: 'Passed', value: @ViewBag.TotalPass },
-            { label: 'Failed', value: @ViewBag.TotalFail },
-            { label: 'Skipped', value: @ViewBag.TotalSkip },
-            { label: 'None', value: @ViewBag.TotalNone }
+            { label: 'Passed', value: @ViewBag.TotalPass, percent : @ViewBag.TotalPassPercent },
+            { label: 'Failed', value: @ViewBag.TotalFail, percent : @ViewBag.TotalFailPercent },
+            { label: 'Skipped', value: @ViewBag.TotalSkip, percent : @ViewBag.TotalSkipPercent },
+            { label: 'None', value: @ViewBag.TotalNone, percent : @ViewBag.TotalNonePercent }
         ],
         colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"],
-        resize : true
+        resize : true,
+        formatter : function (y, data) { return y + ' (' + data.percent + '%)'; }
     });
 
     Morris.Donut({
         element: 'hero-donut2',
         data: [
-            { label: 'Passed', value: @ViewBag.HighPass },
-            { label: 'Failed', value: @ViewBag.HighFail },
-            { label: 'Skipped', value: @ViewBag.HighSkip },
-            { label: 'None', value: @ViewBag.HighNone }
+            { label: 'Passed', value: @ViewBag.HighPass, percent : @ViewBag.HighPassPercent },
+            { label: 'Failed', value: @ViewBag.HighFail, percent : @ViewBag.HighFailPercent },
+            { label: 'Skipped', value: @ViewBag.HighSkip, percent : @ViewBag.HighSkipPercent },
+            { label: 'None', value: @ViewBag.HighNone, percent : @ViewBag.HighNonePercent }
         ],
         colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"],
-        resize : true
+        resize : true,
+        formatter : function (y, data) { return y + ' (' + data.percent + '%)'; }
     });
 
     Morris.Donut({
         element: 'hero-donut3',
         data: [
-            { label: 'Passed', value: @ViewBag.MediumPass },
-            { label: 'Failed', value: @ViewBag.MediumFail },
-            { label: 'Skipped', value: @ViewBag.MediumSkip },
-            { label: 'None', value: @ViewBag.MediumNone }
+            { label: 'Passed', value: @ViewBag.MediumPass, percent : @ViewBag.MediumPassPercent },
+            { label: 'Failed', value: @ViewBag.MediumFail, percent : @ViewBag.MediumFailPercent },
+            { label: 'Skipped', value: @ViewBag.MediumSkip, percent : @ViewBag.MediumSkipPercent },
+            { label: 'None', value: @ViewBag.MediumNone, percent : @ViewBag.MediumNonePercent }
         ],
         colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"],
-        resize : true
+        resize : true,
+        formatter : function (y, data) { return y + ' (' + data.percent + '%)'; }
     });
 
     Morris.Donut({
         element: 'hero-donut4',
         data: [
-            { label: 'Passed', value: @ViewBag.LowPass },
-            { label: 'Failed', value: @ViewBag.LowFail },
-            { label: 'Skipped', value: @ViewBag.LowSkip },
-            { label: 'None', value: @ViewBag.LowNone }
+            { label: 'Passed', value: @ViewBag.LowPass, percent : @ViewBag.LowPassPercent },
+            { label: 'Failed', value: @ViewBag.LowFail, percent : @ViewBag.LowFailPercent },
+            { label: 'Skipped', value: @ViewBag.LowSkip, percent : @ViewBag.LowSkipPercent },
+            { label: 'None', value: @ViewBag.LowNone, percent : @ViewBag.LowNonePercent }
         ],
         colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"],
-        resize : true
+        resize : true,
+        formatter : function (y, data) { return y + ' (' + data.percent + '%)'; }
     });
 
     var datas = @Html.Raw(ViewBag.ReadinessRanData);
