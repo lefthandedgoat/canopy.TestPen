@@ -71,13 +71,6 @@
                         </div>
                         <hr/>
                         <div class="row">
-                            <div class="col-md-12 chart">
-                                <h5>Scenarios Ran Over Time</h5>
-                                <div id="scenarios-ran-over-time"></div>
-                            </div>
-                        </div>
-                        <hr />
-                        <div class="row">
                             <div class="col-md-3 chart">
                                 <h5>Total</h5>
                                 <div id="by-person-total" style="height: 250px;"></div>
@@ -254,16 +247,6 @@
         formatter : function (y, data) { return y + ' (' + data.percent + '%)'; }
     });
 
-    var datas = @Html.Raw(ViewBag.ReadinessRanData);
-    Morris.Line({
-        element: 'scenarios-ran-over-time',
-        data: datas,
-        xkey: 'Date',
-        ykeys: ['Total', 'High', 'Medium', 'Low'],
-        labels: ['Total', 'High', 'Medium', 'Low'],
-        resize : true
-    });
-
     //convert from list of people and their counts to object with all people and counts for morris js
     var datas = @Html.Raw(ViewBag.ReadinessRanByUserByDay);
     var testers = _.uniq(_.map(datas, function(data) { return data.TestedBy; }));
@@ -288,7 +271,7 @@
 
     //by person by T/H/M/L
     //have too many on purpose, these are the morris js colors for line graphs
-    var colors = [ '#edc240', '#cb4b4b', '#9440ed', '#0b62a4', '#7A92A3', '#4da74d', '#afd8f8', '#edc240', '#cb4b4b', '#9440ed', '#0b62a4', '#7A92A3', '#4da74d', '#afd8f8'];
+    var colors = [ '#0b62a4', '#7A92A3', '#4da74d', '#afd8f8', '#edc240', '#cb4b4b', '#9440ed', '#0b62a4', '#7A92A3', '#4da74d', '#afd8f8', '#edc240', '#cb4b4b', '#9440ed' ];
     var datas = @Html.Raw(ViewBag.ReadinessByUserByDayByCriticality);
     var testers = _.uniq(_.map(datas, function(data) { return data.TestedBy; }));
     var totals = _.map(testers, function(tester, key) {

@@ -64,8 +64,7 @@ type ReadinessController() =
         this.ViewData?LowFailPercent <- percent (get "Low" "Fail") totals
         this.ViewData?LowSkipPercent <- percent (get "Low" "Skip") totals
         this.ViewData?LowNonePercent <- percent (get "Low" "Pass") totals
-        
-        this.ViewData?ReadinessRanData <- getReadinessRan id |> JsonConvert.SerializeObject 
+                
         this.ViewData?ReadinessRanByUserByDay <- getRanByUserByDay id |> JsonConvert.SerializeObject 
         this.ViewData?ReadinessByUserByDayByCriticality <- getRanByUserByDayByCriticality id |> JsonConvert.SerializeObject 
         this.ViewData?ReadinessErrors <- getReadinessErrors id
