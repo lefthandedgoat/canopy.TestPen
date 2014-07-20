@@ -33,11 +33,17 @@ type CaseController() =
 
         this.View()
 
-    member this.Pass id = data.pass id this.user
+    member this.Pass id = 
+        data.pass id this.user
+        data.logPassFailSkip id this.user
     
-    member this.Fail id = data.fail id this.user
+    member this.Fail id = 
+        data.fail id this.user
+        data.logPassFailSkip id this.user
     
-    member this.Skip id = data.skip id this.user
+    member this.Skip id = 
+        data.skip id this.user
+        data.logPassFailSkip id this.user
 
     member this.Comment id comment = data.saveComment id (sprintf "%s- %s" this.user comment)
 

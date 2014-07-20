@@ -76,6 +76,33 @@
                                 <div id="scenarios-ran-over-time"></div>
                             </div>
                         </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-3 chart">
+                                <h5>Total</h5>
+                                <div id="by-person-total" style="height: 250px;"></div>
+                            </div>
+                            <div class="col-md-3 chart">
+                                <h5>High</h5>
+                                <div id="by-person-high" style="height: 250px;"></div>
+                            </div>
+                            <div class="col-md-3 chart">
+                                <h5>Medium</h5>
+                                <div id="by-person-medium" style="height: 250px;"></div>
+                            </div>
+                            <div class="col-md-3 chart">
+                                <h5>Low</h5>
+                                <div id="by-person-low" style="height: 250px;"></div>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="row">
+                            <div class="col-md-12 chart">
+                                <h5>Scenarios Ran By Tester</h5>
+                                <div id="scenarios-ran-over-time-by-tester"></div>
+                            </div>
+                        </div>
+
                         <hr/>
                         <div class="row">
                             
@@ -105,7 +132,7 @@
                                     <tbody>
                                        @if (ListModule.IsEmpty(ViewBag.ReadinessErrors))
                                        {
-                                           <tr class="danger">
+                                           <tr class="tr-red-transparent">
                                                <td>None
                                                </td>
                                                <td>
@@ -123,7 +150,7 @@
                                        {
                                            foreach (var error in ViewBag.ReadinessErrors)
                                            {
-                                                <tr class="danger">
+                                                <tr class="tr-red-transparent">
                                                     <td>
                                                     @if (error.TestedBy != null)
                                                     {
@@ -226,6 +253,83 @@
         xkey: 'Date',
         ykeys: ['Total', 'High', 'Medium', 'Low'],
         labels: ['Total', 'High', 'Medium', 'Low'],
+        resize : true
+    });
+
+    //convert from list of people and their counts to object with all people and counts for morris js
+    var datas = @Html.Raw(ViewBag.ReadinessRanByUserByDay);
+    var testers = _.uniq(_.map(datas, function(data) { return data.TestedBy; }));
+    var dates = _.uniq(_.map(datas, function(data) { return data.Date; }));
+    var datas = _.map(dates, function(date) {
+        var temp = { Date : date };
+        _.each(testers, function(tester) {
+            var temp2 = _.find(datas, function(data) { return data.Date === date && data.TestedBy === tester }) || { "Count" : 0 };
+            temp[tester] = temp2.Count;
+        });
+        return temp;
+    });
+    Morris.Line({
+        element: 'scenarios-ran-over-time-by-tester',
+        data: datas,
+        xkey: 'Date',
+        ykeys: testers,
+        labels: testers,
+        resize : true,
+        xLabels : "day"
+    });
+
+    //by person by T/H/M/L
+    var datas = @Html.Raw(ViewBag.ReadinessByUserByDayByCriticality);
+    var testers = _.uniq(_.map(datas, function(data) { return data.TestedBy; }));
+    var totals = _.map(testers, function(tester) {
+        var temp = _.filter(datas, function(data) { return data.TestedBy === tester; });
+        var counts = _.map(temp, function(data) { return data.Count; });
+        var count = _.reduce(counts, function(memo, num){ return memo + num; }, 0);
+        return  { label : tester, value : count };
+    });
+    totals = _.filter(totals, function (data) { return typeof(data) !== 'undefined';} );
+    Morris.Donut({
+        element: 'by-person-total',
+        data: totals,
+        resize : true
+    });
+
+    var highs = _.map(testers, function(tester) {
+        var temp = _.find(datas, function(data) { return data.Criticality === "High" && data.TestedBy === tester; });
+        if (typeof(temp) !== 'undefined'){
+            return  { label : tester, value : temp.Count };
+        };
+    });
+    highs = _.filter(highs, function (data) { return typeof(data) !== 'undefined';} );
+    Morris.Donut({
+        element: 'by-person-high',
+        data: highs,
+        resize : true
+    });
+
+    var mediums = _.map(testers, function(tester) {
+        var temp = _.find(datas, function(data) { return data.Criticality === "Medium" && data.TestedBy === tester; });
+        if (typeof(temp) !== 'undefined'){
+            return  { label : tester, value : temp.Count };
+        }
+    });
+    mediums = _.filter(mediums, function (data) { return typeof(data) !== 'undefined';} );
+    Morris.Donut({
+        element: 'by-person-medium',
+        data: mediums,
+        resize : true
+    });
+
+    var lows = _.map(testers, function(tester) {
+        var temp = _.find(datas, function(data) { return data.Criticality === "Low" && data.TestedBy === tester; });
+        if (typeof(temp) !== 'undefined'){
+            return  { label : tester, value : temp.Count };
+        }
+    });
+    lows = _.filter(lows, function (data) { return typeof(data) !== 'undefined';} );
+    Morris.Donut({
+        element: 'by-person-low',
+        data: lows,
         resize : true
     });
 

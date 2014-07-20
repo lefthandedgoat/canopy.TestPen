@@ -239,19 +239,25 @@ type passQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = '
 
 let pass id user =    
     let cmd = new passQuery()  
-    cmd.Execute(Id = id, User = user)
+    cmd.Execute(Id = id, User = user) |> ignore
 
 type failQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Fail', TestedBy = @User, UpdateDate = getdate() Where Id = @Id", "name=TestPen">
 
 let fail id user =    
     let cmd = new failQuery()  
-    cmd.Execute(Id = id, User = user)
+    cmd.Execute(Id = id, User = user) |> ignore
 
 type skipQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Skip', TestedBy = @User, UpdateDate = getdate() Where Id = @Id", "name=TestPen">
 
 let skip id user =
     let cmd = new skipQuery()
-    cmd.Execute(Id = id, User = user)
+    cmd.Execute(Id = id, User = user) |> ignore
+
+type logPassFailSkipQuery = SqlCommandProvider<"Insert Into [dbo].[PassFailSkipLog] VALUES (@ScenarioId, @User, getdate())", "name=TestPen">
+
+let logPassFailSkip id user =
+    let cmd = new logPassFailSkipQuery()
+    cmd.Execute(ScenarioId = id, User = user) |> ignore
 
 type saveCommentQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set Comment = @Comment Where Id = @Id", "name=TestPen">
 
@@ -585,6 +591,7 @@ let getReadinessRan runId =
                 Count = result.cnt.Value
                 RunId = result.Id 
                 Criticality = result.Criticality
+                TestedBy = ""
             } )
     let runIds = 
         results 
@@ -629,11 +636,11 @@ let getReadinessErrors runId =
     |> Async.RunSynchronously
     |> List.ofSeq
 
-let queryForlater = """
+[<Literal>]
+let getRanByUserByDayQuery = """
 SELECT
 CAST(s.UpdateDate AS DATE) as UpdateDate
 ,r.Id
-,s.Criticality
 ,s.TestedBy
 ,COUNT(*) as cnt
 FROM [CanopyTestPen].[dbo].[Scenarios] as s
@@ -641,12 +648,62 @@ JOIN [CanopyTestPen].[dbo].[Runs]as r
 ON s.RunId = r.Id
 WHERE (TestStatus = 'Pass'
 OR TestStatus = 'Fail')
-AND r.Id = 12
+AND r.Id = @RunId
 AND r.IsActive = 1
 AND s.TestedBy IS NOT NULL
 AND s.UpdateDate IS NOT NULL
-GROUP BY r.Id, CAST(s.UpdateDate AS DATE), s.Criticality, s.TestedBy
+GROUP BY r.Id, CAST(s.UpdateDate AS DATE), s.TestedBy
 ORDER BY r.Id DESC
-
-
 """
+
+type getRanByUserByDayQuery = SqlCommandProvider<getRanByUserByDayQuery, "name=TestPen">
+
+let getRanByUserByDay runId =
+    let cmd = new getRanByUserByDayQuery()    
+    cmd.AsyncExecute(RunId = runId)
+    |> Async.RunSynchronously
+    |> List.ofSeq
+    |> List.map (fun result -> 
+            { 
+                Date = System.String.Format("{0:yyyy-MM-dd}", result.UpdateDate.Value)
+                Count = result.cnt.Value
+                RunId = result.Id 
+                TestedBy = result.TestedBy.Value
+                Criticality = ""
+            } )
+
+[<Literal>]
+let getRanByUserByDayByCriticalityQuery = """
+SELECT
+r.Id
+,s.TestedBy
+,s.Criticality
+,COUNT(*) as cnt
+FROM [CanopyTestPen].[dbo].[Scenarios] as s
+JOIN [CanopyTestPen].[dbo].[Runs]as r
+ON s.RunId = r.Id
+WHERE (TestStatus = 'Pass'
+OR TestStatus = 'Fail')
+AND r.Id = @RunId
+AND r.IsActive = 1
+AND s.TestedBy IS NOT NULL
+AND s.UpdateDate IS NOT NULL
+GROUP BY r.Id, s.TestedBy, s.Criticality
+ORDER BY r.Id DESC
+"""
+
+type getRanByUserByDayByCriticalityQuery = SqlCommandProvider<getRanByUserByDayByCriticalityQuery, "name=TestPen">
+
+let getRanByUserByDayByCriticality runId =
+    let cmd = new getRanByUserByDayByCriticalityQuery()    
+    cmd.AsyncExecute(RunId = runId)
+    |> Async.RunSynchronously
+    |> List.ofSeq
+    |> List.map (fun result -> 
+            { 
+                Date = ""
+                Count = result.cnt.Value
+                RunId = result.Id 
+                TestedBy = result.TestedBy.Value
+                Criticality = result.Criticality
+            } )

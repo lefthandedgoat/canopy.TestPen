@@ -36,5 +36,8 @@ type ReadinessController() =
         this.ViewData?LowNone <- get "Low" "None"
         
         this.ViewData?ReadinessRanData <- getReadinessRan id |> JsonConvert.SerializeObject 
+        this.ViewData?ReadinessRanByUserByDay <- getRanByUserByDay id |> JsonConvert.SerializeObject 
+        this.ViewData?ReadinessByUserByDayByCriticality <- getRanByUserByDayByCriticality id |> JsonConvert.SerializeObject 
         this.ViewData?ReadinessErrors <- getReadinessErrors id
+
         this.View()

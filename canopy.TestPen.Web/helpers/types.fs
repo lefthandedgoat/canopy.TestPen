@@ -28,13 +28,6 @@ type getPSFNResult = {
     Percent : decimal
 }
 
-type getReadinessBarResult = {
-    Date : string
-    Count : int
-    RunId : int
-    Criticality : string
-}
-
 type getReadinessDataResult = {
     Date : string    
     RunId : int
@@ -42,4 +35,12 @@ type getReadinessDataResult = {
     High : int
     Medium : int
     Low : int
+}
+
+type getRanByUserByDayByCriticalityResult = {
+    Date : string
+    Count : int
+    RunId : int
+    TestedBy : string
+    Criticality : string
 }
