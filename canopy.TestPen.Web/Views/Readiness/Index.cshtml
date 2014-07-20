@@ -1,4 +1,5 @@
-﻿<div class="content">
+﻿@using Microsoft.FSharp.Collections
+<div class="content">
     <div id="pad-wrapper" class="less-padding">
         <div class="panel-group">
             <div class="panel panel-default">
@@ -9,13 +10,13 @@
                 <div class="panel-collapsed">
                     <div class="panel-body no-padding-bottom">
 @*                        <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-md-12">
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th class="col-lg-1">Story
+                                            <th class="col-md-1">Story
                                             </th>
-                                            <th class="col-lg-5">
+                                            <th class="col-md-5">
                                                 <span class="line"></span>Description
                                             </th>
                                         </tr>
@@ -51,32 +52,131 @@
                         </div>*@
 
                         <div class="row">
-                            <div class="col-lg-3 chart">
+                            <div class="col-md-3 chart">
                                 <h5>Total</h5>
                                 <div id="hero-donut" style="height: 250px;"></div>
                             </div>
-                            <div class="col-lg-3 chart">
+                            <div class="col-md-3 chart">
                                 <h5>High</h5>
                                 <div id="hero-donut2" style="height: 250px;"></div>
                             </div>
-                            <div class="col-lg-3 chart">
+                            <div class="col-md-3 chart">
                                 <h5>Medium</h5>
                                 <div id="hero-donut3" style="height: 250px;"></div>
                             </div>
-                            <div class="col-lg-3 chart">
+                            <div class="col-md-3 chart">
                                 <h5>Low</h5>
                                 <div id="hero-donut4" style="height: 250px;"></div>
                             </div>
                         </div>
                         <hr/>
                         <div class="row">
-                            <div class="col-lg-12 chart">
+                            <div class="col-md-12 chart">
                                 <h5>Scenarios Ran Over Time</h5>
                                 <div id="scenarios-ran-over-time"></div>
                             </div>
                         </div>
-
+                        <hr />
                         <div class="row">
+                            <div class="col-md-3 chart">
+                                <h5>Total</h5>
+                                <div id="by-person-total" style="height: 250px;"></div>
+                            </div>
+                            <div class="col-md-3 chart">
+                                <h5>High</h5>
+                                <div id="by-person-high" style="height: 250px;"></div>
+                            </div>
+                            <div class="col-md-3 chart">
+                                <h5>Medium</h5>
+                                <div id="by-person-medium" style="height: 250px;"></div>
+                            </div>
+                            <div class="col-md-3 chart">
+                                <h5>Low</h5>
+                                <div id="by-person-low" style="height: 250px;"></div>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="row">
+                            <div class="col-md-12 chart">
+                                <h5>Scenarios Ran By Tester</h5>
+                                <div id="scenarios-ran-over-time-by-tester"></div>
+                            </div>
+                        </div>
+
+                        <hr/>
+                        <div class="row">
+                            
+                            <div class="col-md-12">
+                                <h5>Failed</h5>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-md-1">Tested By
+                                            </th>
+                                            <th class="col-md-1">Criticality
+                                            </th>
+                                            <th class="col-md-1"><span class="line"></span>Area
+                                            </th>
+                                            <th class="col-md-1"><span class="line"></span>Page
+                                            </th>
+                                            <th class="col-md-2"><span class="line"></span>Section
+                                            </th>
+                                            <th class="col-md-3">
+                                                <span class="line"></span>Description
+                                            </th>
+                                            <th class="col-md-4">
+                                                <span class="line"></span>Comment
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                       @if (ListModule.IsEmpty(ViewBag.ReadinessErrors))
+                                       {
+                                           <tr class="tr-red-transparent">
+                                               <td>None
+                                               </td>
+                                               <td>
+                                               </td>
+                                               <td>
+                                               </td>
+                                               <td>
+                                               </td>
+                                               <td></td>
+                                               <td></td>
+                                               <td></td>
+                                           </tr>
+                                       }
+                                       else
+                                       {
+                                           foreach (var error in ViewBag.ReadinessErrors)
+                                           {
+                                                <tr class="tr-red-transparent">
+                                                    <td>
+                                                    @if (error.TestedBy != null)
+                                                    {
+                                                        <span>@error.TestedBy.Value</span>
+                                                    }
+                                                    </td>
+                                                    <td>@error.Criticality
+                                                    </td>
+                                                    <td>@error.Area
+                                                    </td>
+                                                    <td>@error.Section
+                                                    </td>
+                                                    <td>@error.Name
+                                                    </td>
+                                                    <td>@error.Description
+                                                    </td>
+                                                    <td>@error.Comment
+                                                    </td>
+                                                </tr>
+  
+                                           }
+                                       }
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -98,57 +198,153 @@
 <script type="text/javascript">
 
     // Morris Donut Chart
+    var datas = [
+        { label: 'Passed', value: @ViewBag.TotalPass, percent: @ViewBag.TotalPassPercent, color: "#47a447" },
+        { label: 'Failed', value: @ViewBag.TotalFail, percent: @ViewBag.TotalFailPercent, color: "#d2322d" },
+        { label: 'Skipped', value: @ViewBag.TotalSkip, percent: @ViewBag.TotalSkipPercent, color: "#f0ad4e" },
+        { label: 'None', value: @ViewBag.TotalNone, percent: @ViewBag.TotalNonePercent, color: "#DDDDDD" }
+    ];
+    datas = _.filter(datas, function (data) { return data.value !== 0 });
     Morris.Donut({
         element: 'hero-donut',
-        data: [
-            { label: 'Passed', value: @ViewBag.TotalPass },
-            { label: 'Failed', value: @ViewBag.TotalFail },
-            { label: 'Skipped', value: @ViewBag.TotalSkip },
-            { label: 'None', value: @ViewBag.TotalNone }
-        ],
-        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"]
+        data: datas,
+        resize : true,
+        formatter : function (y, data) { return y + ' (' + data.percent + '%)'; }
     });
 
+    var datas = [
+        { label: 'Passed', value: @ViewBag.HighPass, percent: @ViewBag.HighPassPercent, color: "#47a447" },
+        { label: 'Failed', value: @ViewBag.HighFail, percent: @ViewBag.HighFailPercent, color: "#d2322d" },
+        { label: 'Skipped', value: @ViewBag.HighSkip, percent: @ViewBag.HighSkipPercent, color: "#f0ad4e" },
+        { label: 'None', value: @ViewBag.HighNone, percent: @ViewBag.HighNonePercent, color: "#DDDDDD" }
+    ];
+    datas = _.filter(datas, function (data) { return data.value !== 0 });
     Morris.Donut({
         element: 'hero-donut2',
-        data: [
-            { label: 'Passed', value: @ViewBag.HighPass },
-            { label: 'Failed', value: @ViewBag.HighFail },
-            { label: 'Skipped', value: @ViewBag.HighSkip },
-            { label: 'None', value: @ViewBag.HighNone }
-        ],
-        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"]
+        data: datas,
+        resize : true,
+        formatter : function (y, data) { return y + ' (' + data.percent + '%)'; }
     });
 
+    var datas = [
+        { label: 'Passed', value: @ViewBag.MediumPass, percent: @ViewBag.MediumPassPercent, color: "#47a447" },
+        { label: 'Failed', value: @ViewBag.MediumFail, percent: @ViewBag.MediumFailPercent, color: "#d2322d" },
+        { label: 'Skipped', value: @ViewBag.MediumSkip, percent: @ViewBag.MediumSkipPercent, color: "#f0ad4e" },
+        { label: 'None', value: @ViewBag.MediumNone, percent: @ViewBag.MediumNonePercent, color: "#DDDDDD" }
+    ];
+    datas = _.filter(datas, function (data) { return data.value !== 0 });
     Morris.Donut({
         element: 'hero-donut3',
-        data: [
-            { label: 'Passed', value: @ViewBag.MediumPass },
-            { label: 'Failed', value: @ViewBag.MediumFail },
-            { label: 'Skipped', value: @ViewBag.MediumSkip },
-            { label: 'None', value: @ViewBag.MediumNone }
-        ],
-        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"]
+        data: datas,
+        resize : true,
+        formatter : function (y, data) { return y + ' (' + data.percent + '%)'; }
     });
 
+    var datas = [
+        { label: 'Passed', value: @ViewBag.LowPass, percent: @ViewBag.LowPassPercent, color : "#47a447" },
+        { label: 'Failed', value: @ViewBag.LowFail, percent: @ViewBag.LowFailPercent, color : "#d2322d" },
+        { label: 'Skipped', value: @ViewBag.LowSkip, percent: @ViewBag.LowSkipPercent, color : "#f0ad4e" },
+        { label: 'None', value: @ViewBag.LowNone, percent: @ViewBag.LowNonePercent, color : "#DDDDDD" }
+    ];
+    datas = _.filter(datas, function (data) { return data.value !== 0 });
     Morris.Donut({
         element: 'hero-donut4',
-        data: [
-            { label: 'Passed', value: @ViewBag.LowPass },
-            { label: 'Failed', value: @ViewBag.LowFail },
-            { label: 'Skipped', value: @ViewBag.LowSkip },
-            { label: 'None', value: @ViewBag.LowNone }
-        ],
-        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"]
+        data: datas,
+        resize : true,
+        formatter : function (y, data) { return y + ' (' + data.percent + '%)'; }
     });
 
-    var datas = @Html.Raw(ViewBag.ReadinessBarData);
+    var datas = @Html.Raw(ViewBag.ReadinessRanData);
     Morris.Line({
         element: 'scenarios-ran-over-time',
         data: datas,
         xkey: 'Date',
-        ykeys: ['Count'],
-        labels: ['Passed']
+        ykeys: ['Total', 'High', 'Medium', 'Low'],
+        labels: ['Total', 'High', 'Medium', 'Low'],
+        resize : true
+    });
+
+    //convert from list of people and their counts to object with all people and counts for morris js
+    var datas = @Html.Raw(ViewBag.ReadinessRanByUserByDay);
+    var testers = _.uniq(_.map(datas, function(data) { return data.TestedBy; }));
+    var dates = _.uniq(_.map(datas, function(data) { return data.Date; }));
+    var datas = _.map(dates, function(date) {
+        var temp = { Date : date };
+        _.each(testers, function(tester) {
+            var temp2 = _.find(datas, function(data) { return data.Date === date && data.TestedBy === tester }) || { "Count" : 0 };
+            temp[tester] = temp2.Count;
+        });
+        return temp;
+    });
+    Morris.Line({
+        element: 'scenarios-ran-over-time-by-tester',
+        data: datas,
+        xkey: 'Date',
+        ykeys: testers,
+        labels: testers,
+        resize : true,
+        xLabels : "day"
+    });
+
+    //by person by T/H/M/L
+    //have too many on purpose, these are the morris js colors for line graphs
+    var colors = [ '#edc240', '#cb4b4b', '#9440ed', '#0b62a4', '#7A92A3', '#4da74d', '#afd8f8', '#edc240', '#cb4b4b', '#9440ed', '#0b62a4', '#7A92A3', '#4da74d', '#afd8f8'];
+    var datas = @Html.Raw(ViewBag.ReadinessByUserByDayByCriticality);
+    var testers = _.uniq(_.map(datas, function(data) { return data.TestedBy; }));
+    var totals = _.map(testers, function(tester, key) {
+        var temp = _.filter(datas, function(data) { return data.TestedBy === tester; });
+        var counts = _.map(temp, function(data) { return data.Count; });
+        var count = _.reduce(counts, function(memo, num){ return memo + num; }, 0);
+        return  { label : tester, value : count, color: colors[key] };
+    });
+    totals = _.filter(totals, function (data) { return typeof(data) !== 'undefined';} );
+    Morris.Donut({
+        element: 'by-person-total',
+        data: totals,
+        resize : true,
+        colors: [ '#3980B5', '#0BA462', '#7a92a3', '#AFD8F8' ]
+    });
+
+    var highs = _.map(testers, function(tester, key) {
+        var temp = _.find(datas, function(data) { return data.Criticality === "High" && data.TestedBy === tester; });
+        if (typeof(temp) !== 'undefined'){
+            return  { label : tester, value : temp.Count, color: colors[key] };
+        };
+    });
+    highs = _.filter(highs, function (data) { return typeof(data) !== 'undefined';} );
+    Morris.Donut({
+        element: 'by-person-high',
+        data: highs,
+        resize : true,
+        colors: [ '#3980B5', '#0BA462', '#7a92a3', '#AFD8F8' ]
+    });
+
+    var mediums = _.map(testers, function(tester, key) {
+        var temp = _.find(datas, function(data) { return data.Criticality === "Medium" && data.TestedBy === tester; });
+        if (typeof(temp) !== 'undefined'){
+            return  { label : tester, value : temp.Count, color: colors[key] };
+        }
+    });
+    mediums = _.filter(mediums, function (data) { return typeof(data) !== 'undefined';} );
+    Morris.Donut({
+        element: 'by-person-medium',
+        data: mediums,
+        resize : true,
+        colors: [ '#3980B5', '#0BA462', '#7a92a3', '#AFD8F8' ]
+    });
+
+    var lows = _.map(testers, function(tester, key) {
+        var temp = _.find(datas, function(data) { return data.Criticality === "Low" && data.TestedBy === tester; });
+        if (typeof(temp) !== 'undefined'){
+            return  { label : tester, value : temp.Count, color: colors[key] };
+        }
+    });
+    lows = _.filter(lows, function (data) { return typeof(data) !== 'undefined';} );
+    Morris.Donut({
+        element: 'by-person-low',
+        data: lows,
+        resize : true,
+        colors: [ '#3980B5', '#0BA462', '#7a92a3', '#AFD8F8' ]
     });
 
 </script>

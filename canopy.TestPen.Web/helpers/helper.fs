@@ -6,9 +6,12 @@ open Newtonsoft.Json
 
 let (?<-) (viewData:ViewDataDictionary) (name:string) (value:'T) = viewData.Add(name, box value)
 
-let percent a b = 
-    let result = (decimal a) / (decimal b) * 100M
-    System.Math.Round(result, 1)
+let percent numerator denominator = 
+    if numerator = 0 then 0M
+    else if denominator = 0 then 0M
+    else
+        let result = (decimal numerator) / (decimal denominator) * 100M
+        System.Math.Round(result, 1)
 
 let toJson sectionId (reports : data.getReportsQuery.Record list) =     
     let reports =

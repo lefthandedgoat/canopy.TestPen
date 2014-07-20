@@ -9,7 +9,7 @@ open types
 [<Literal>]
 let private addRunQuery = """
 INSERT INTO dbo.Runs
-VALUES (getdate())
+VALUES (getdate(), 1)
 
 SELECT SCOPE_IDENTITY()"""
 
@@ -24,7 +24,11 @@ let addRun () =
     result.Value |> int
 
 [<Literal>]
-let private getRunsQuery = """SELECT TOP 5 Id, Date FROM dbo.Runs ORDER BY ID DESC"""
+let private getRunsQuery = """
+SELECT TOP 5 Id, Date 
+FROM dbo.Runs
+WHERE IsActive = 1
+ORDER BY ID DESC"""
 
 type GetRunsQuery = SqlCommandProvider<getRunsQuery, "name=TestPen">
 
@@ -60,7 +64,7 @@ let addPage run (page : TestCases.Page) =
 [<Literal>]
 let private addCasesQuery = """
 INSERT INTO dbo.Cases
-VALUES (@RunId, @PageId, @Feature, @Description, @Criticality, @Documentation)
+VALUES (@RunId, @PageId, @Feature, @Description, @Criticality, @Documentation, null)
 
 SELECT SCOPE_IDENTITY()"""
 
@@ -75,7 +79,7 @@ let addCase run page (case: TestCases.Casis) =
     result.Value |> int
 
 [<Literal>]
-let private getCasesQuery = """SELECT Cases.Id as CaseId, Area, Section, Name, Criticality, 0 as Pass, 0 As Fail, 0 As Skip, 0 as None
+let private getCasesQuery = """SELECT ClaimedBy, Cases.Id as CaseId, Area, Section, Name, Criticality, 0 as Pass, 0 As Fail, 0 As Skip, 0 as None
 FROM dbo.Pages JOIN dbo.Cases
 ON Cases.RunId = Pages.RunId 
 AND Cases.PageId = Pages.Id
@@ -135,6 +139,7 @@ let mapPassFailSkipNoneToSummaries (pfskns : getPassFailSkipNoneQuery.Record lis
           let total = pass + fail + skip + none
           let percent = if total = 0 then 0.0M else System.Math.Round((decimal (pass + fail)) / (decimal total) * 100M, 1)
           {
+            ClaimedBy = summary.ClaimedBy
             CaseId = summary.CaseId
             Area = summary.Area
             Section = summary.Section
@@ -230,27 +235,33 @@ let getPFSNByCase case exceutionType =
         Percent = percent
     }
 
-type passQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Pass' Where Id = @Id", "name=TestPen">
+type passQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Pass', TestedBy = @User, UpdateDate = getdate() Where Id = @Id", "name=TestPen">
 
-let pass (id : int) =    
+let pass id user =    
     let cmd = new passQuery()  
-    cmd.Execute(Id = id)
+    cmd.Execute(Id = id, User = user) |> ignore
 
-type failQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Fail' Where Id = @Id", "name=TestPen">
+type failQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Fail', TestedBy = @User, UpdateDate = getdate() Where Id = @Id", "name=TestPen">
 
-let fail (id : int) =    
+let fail id user =    
     let cmd = new failQuery()  
-    cmd.Execute(Id = id)
+    cmd.Execute(Id = id, User = user) |> ignore
 
-type skipQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Skip' Where Id = @Id", "name=TestPen">
+type skipQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set TestStatus = 'Skip', TestedBy = @User, UpdateDate = getdate() Where Id = @Id", "name=TestPen">
 
-let skip (id : int) =
+let skip id user =
     let cmd = new skipQuery()
-    cmd.Execute(Id = id)
+    cmd.Execute(Id = id, User = user) |> ignore
+
+type logPassFailSkipQuery = SqlCommandProvider<"Insert Into [dbo].[PassFailSkipLog] VALUES (@ScenarioId, @User, getdate())", "name=TestPen">
+
+let logPassFailSkip id user =
+    let cmd = new logPassFailSkipQuery()
+    cmd.Execute(ScenarioId = id, User = user) |> ignore
 
 type saveCommentQuery = SqlCommandProvider<"Update [dbo].[Scenarios] Set Comment = @Comment Where Id = @Id", "name=TestPen">
 
-let saveComment (id : int) (comment: string) =
+let saveComment id comment =
     let cmd = new saveCommentQuery()
     cmd.Execute(Id = id, Comment = comment)
 
@@ -260,7 +271,7 @@ let saveComment (id : int) (comment: string) =
 [<Literal>]
 let private addScenarioQuery = """
 INSERT INTO dbo.Scenarios
-VALUES (@RunId, @CaseId, @Description, @Criticality, @TestType, @TestExecutionType, @TestStatus, @Configuration, @Code, null)
+VALUES (@RunId, @CaseId, @Description, @Criticality, @TestType, @TestExecutionType, @TestStatus, @Configuration, @Code, null, null, null)
 
 SELECT SCOPE_IDENTITY()"""
 
@@ -278,7 +289,7 @@ let addScenario run caseId (scenario: TestCases.TestScenario) =
     result.Value |> int
 
 [<Literal>]
-let private getScenariosQuery = """SELECT Id, CaseId, Description, Criticality, TestType, TestExecutionType, TestStatus, Configuration, Code, Comment
+let private getScenariosQuery = """SELECT Id, CaseId, Description, Criticality, TestType, TestExecutionType, TestStatus, Configuration, Code, Comment, TestedBy
 FROM [dbo].[Scenarios]
 WHERE CaseId = @CaseId"""
 
@@ -289,6 +300,18 @@ let getScenarios case =
     cmd.AsyncExecute(CaseId = case)
     |> Async.RunSynchronously
     |> List.ofSeq
+
+type claimQuery = SqlCommandProvider<"Update [dbo].[Cases] Set ClaimedBy = @User Where Id = @Id AND ClaimedBy IS NULL", "name=TestPen">
+
+let claim id user =
+    let cmd = new claimQuery()
+    cmd.Execute(Id = id, User = user)
+
+type unclaimQuery = SqlCommandProvider<"Update [dbo].[Cases] Set ClaimedBy = null Where Id = @Id", "name=TestPen">
+
+let unclaim id =
+    let cmd = new unclaimQuery()
+    cmd.Execute(Id = id)
 
 /////////////
 //Inputs
@@ -539,24 +562,148 @@ let getPFSNReadiness run =
     |> List.ofSeq
     
 [<Literal>]
-let private getReadinessBarQuery = """SELECT
+let private getReadinessRanQuery = """SELECT
 r.Date
 ,r.Id
+,s.Criticality
 ,COUNT(*) as cnt
 FROM [CanopyTestPen].[dbo].[Scenarios] as s
 JOIN [CanopyTestPen].[dbo].[Runs]as r
 ON s.RunId = r.Id
-WHERE TestStatus = 'Pass'
+WHERE (TestStatus = 'Pass'
+OR TestStatus = 'Fail')
 AND r.Id <= @RunId
-GROUP BY r.Id, r.Date
+AND r.IsActive = 1
+GROUP BY r.Id, r.Date, s.Criticality
 ORDER BY r.Id DESC"""
 
-type getReadinessBarQuery = SqlCommandProvider<getReadinessBarQuery, "name=TestPen">
+type getReadinessRanQuery = SqlCommandProvider<getReadinessRanQuery, "name=TestPen">
 
-let getReadinessBar runId =
-    let cmd = new getReadinessBarQuery()
+let getReadinessRan runId =
+    let cmd = new getReadinessRanQuery()
+    let results =
+        cmd.AsyncExecute(RunId = runId)
+        |> Async.RunSynchronously
+        |> List.ofSeq
+        |> List.map (fun result -> 
+            { 
+                Date = System.String.Format("{0:yyyy-MM-dd}", result.Date)
+                Count = result.cnt.Value
+                RunId = result.Id 
+                Criticality = result.Criticality
+                TestedBy = ""
+            } )
+    let runIds = 
+        results 
+        |> Seq.distinctBy (fun result -> result.RunId)
+        |> Seq.map (fun result -> result.RunId)
+    
+    runIds 
+    |> Seq.map (fun runId ->
+        {
+            Date = (results |> List.find (fun result -> result.RunId = runId)).Date
+            RunId = runId
+            Total = results |> List.filter (fun result -> result.RunId = runId) |> List.map (fun result -> result.Count) |> List.sum
+            High = results |> List.filter (fun result -> result.RunId = runId && result.Criticality = "High") |> List.map (fun result -> result.Count) |> List.sum
+            Medium = results |> List.filter (fun result -> result.RunId = runId && result.Criticality = "Medium") |> List.map (fun result -> result.Count) |> List.sum
+            Low = results |> List.filter (fun result -> result.RunId = runId && result.Criticality = "Low") |> List.map (fun result -> result.Count) |> List.sum
+        } )
+    |> List.ofSeq
+
+[<Literal>]
+let private getReadinessErrorsQuery = """SELECT 
+	s.TestedBy
+    ,s.Criticality
+    ,Area
+	,Section
+	,Name
+	,s.[Description]    
+    ,ISNULL([Comment],'') as Comment
+FROM [CanopyTestPen].[dbo].[Scenarios] as s
+JOIN [CanopyTestPen].[dbo].[Cases] as c
+ON s.CaseId = c.Id
+JOIN [CanopyTestPen].[dbo].[Pages] as p
+ON c.PageId = p.Id
+WHERE s.RunId = @RunId
+AND TestStatus = 'Fail'
+"""
+
+type getReadinessErrorsQuery = SqlCommandProvider<getReadinessErrorsQuery, "name=TestPen">
+
+let getReadinessErrors runId =
+    let cmd = new getReadinessErrorsQuery()    
     cmd.AsyncExecute(RunId = runId)
     |> Async.RunSynchronously
     |> List.ofSeq
-    |> List.map (fun result -> { Date = System.String.Format("{0:yyyy-MM-dd}", result.Date); Count = result.cnt.Value; RunId = result.Id } )
-    
+
+[<Literal>]
+let getRanByUserByDayQuery = """
+SELECT
+CAST(s.UpdateDate AS DATE) as UpdateDate
+,r.Id
+,s.TestedBy
+,COUNT(*) as cnt
+FROM [CanopyTestPen].[dbo].[Scenarios] as s
+JOIN [CanopyTestPen].[dbo].[Runs]as r
+ON s.RunId = r.Id
+WHERE (TestStatus = 'Pass'
+OR TestStatus = 'Fail')
+AND r.Id = @RunId
+AND r.IsActive = 1
+AND s.TestedBy IS NOT NULL
+AND s.UpdateDate IS NOT NULL
+GROUP BY r.Id, CAST(s.UpdateDate AS DATE), s.TestedBy
+ORDER BY r.Id DESC
+"""
+
+type getRanByUserByDayQuery = SqlCommandProvider<getRanByUserByDayQuery, "name=TestPen">
+
+let getRanByUserByDay runId =
+    let cmd = new getRanByUserByDayQuery()    
+    cmd.AsyncExecute(RunId = runId)
+    |> Async.RunSynchronously
+    |> List.ofSeq
+    |> List.map (fun result -> 
+            { 
+                Date = System.String.Format("{0:yyyy-MM-dd}", result.UpdateDate.Value)
+                Count = result.cnt.Value
+                RunId = result.Id 
+                TestedBy = result.TestedBy.Value
+                Criticality = ""
+            } )
+
+[<Literal>]
+let getRanByUserByDayByCriticalityQuery = """
+SELECT
+r.Id
+,s.TestedBy
+,s.Criticality
+,COUNT(*) as cnt
+FROM [CanopyTestPen].[dbo].[Scenarios] as s
+JOIN [CanopyTestPen].[dbo].[Runs]as r
+ON s.RunId = r.Id
+WHERE (TestStatus = 'Pass'
+OR TestStatus = 'Fail')
+AND r.Id = @RunId
+AND r.IsActive = 1
+AND s.TestedBy IS NOT NULL
+AND s.UpdateDate IS NOT NULL
+GROUP BY r.Id, s.TestedBy, s.Criticality
+ORDER BY r.Id DESC
+"""
+
+type getRanByUserByDayByCriticalityQuery = SqlCommandProvider<getRanByUserByDayByCriticalityQuery, "name=TestPen">
+
+let getRanByUserByDayByCriticality runId =
+    let cmd = new getRanByUserByDayByCriticalityQuery()    
+    cmd.AsyncExecute(RunId = runId)
+    |> Async.RunSynchronously
+    |> List.ofSeq
+    |> List.map (fun result -> 
+            { 
+                Date = ""
+                Count = result.cnt.Value
+                RunId = result.Id 
+                TestedBy = result.TestedBy.Value
+                Criticality = result.Criticality
+            } )
