@@ -198,54 +198,58 @@
 <script type="text/javascript">
 
     // Morris Donut Chart
+    var datas = [
+        { label: 'Passed', value: @ViewBag.TotalPass, percent: @ViewBag.TotalPassPercent, color: "#47a447" },
+        { label: 'Failed', value: @ViewBag.TotalFail, percent: @ViewBag.TotalFailPercent, color: "#d2322d" },
+        { label: 'Skipped', value: @ViewBag.TotalSkip, percent: @ViewBag.TotalSkipPercent, color: "#f0ad4e" },
+        { label: 'None', value: @ViewBag.TotalNone, percent: @ViewBag.TotalNonePercent, color: "#DDDDDD" }
+    ];
+    datas = _.filter(datas, function (data) { return data.value !== 0 });
     Morris.Donut({
         element: 'hero-donut',
-        data: [
-            { label: 'Passed', value: @ViewBag.TotalPass, percent : @ViewBag.TotalPassPercent },
-            { label: 'Failed', value: @ViewBag.TotalFail, percent : @ViewBag.TotalFailPercent },
-            { label: 'Skipped', value: @ViewBag.TotalSkip, percent : @ViewBag.TotalSkipPercent },
-            { label: 'None', value: @ViewBag.TotalNone, percent : @ViewBag.TotalNonePercent }
-        ],
-        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"],
+        data: datas,
         resize : true,
         formatter : function (y, data) { return y + ' (' + data.percent + '%)'; }
     });
 
+    var datas = [
+        { label: 'Passed', value: @ViewBag.HighPass, percent: @ViewBag.HighPassPercent, color: "#47a447" },
+        { label: 'Failed', value: @ViewBag.HighFail, percent: @ViewBag.HighFailPercent, color: "#d2322d" },
+        { label: 'Skipped', value: @ViewBag.HighSkip, percent: @ViewBag.HighSkipPercent, color: "#f0ad4e" },
+        { label: 'None', value: @ViewBag.HighNone, percent: @ViewBag.HighNonePercent, color: "#DDDDDD" }
+    ];
+    datas = _.filter(datas, function (data) { return data.value !== 0 });
     Morris.Donut({
         element: 'hero-donut2',
-        data: [
-            { label: 'Passed', value: @ViewBag.HighPass, percent : @ViewBag.HighPassPercent },
-            { label: 'Failed', value: @ViewBag.HighFail, percent : @ViewBag.HighFailPercent },
-            { label: 'Skipped', value: @ViewBag.HighSkip, percent : @ViewBag.HighSkipPercent },
-            { label: 'None', value: @ViewBag.HighNone, percent : @ViewBag.HighNonePercent }
-        ],
-        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"],
+        data: datas,
         resize : true,
         formatter : function (y, data) { return y + ' (' + data.percent + '%)'; }
     });
 
+    var datas = [
+        { label: 'Passed', value: @ViewBag.MediumPass, percent: @ViewBag.MediumPassPercent, color: "#47a447" },
+        { label: 'Failed', value: @ViewBag.MediumFail, percent: @ViewBag.MediumFailPercent, color: "#d2322d" },
+        { label: 'Skipped', value: @ViewBag.MediumSkip, percent: @ViewBag.MediumSkipPercent, color: "#f0ad4e" },
+        { label: 'None', value: @ViewBag.MediumNone, percent: @ViewBag.MediumNonePercent, color: "#DDDDDD" }
+    ];
+    datas = _.filter(datas, function (data) { return data.value !== 0 });
     Morris.Donut({
         element: 'hero-donut3',
-        data: [
-            { label: 'Passed', value: @ViewBag.MediumPass, percent : @ViewBag.MediumPassPercent },
-            { label: 'Failed', value: @ViewBag.MediumFail, percent : @ViewBag.MediumFailPercent },
-            { label: 'Skipped', value: @ViewBag.MediumSkip, percent : @ViewBag.MediumSkipPercent },
-            { label: 'None', value: @ViewBag.MediumNone, percent : @ViewBag.MediumNonePercent }
-        ],
-        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"],
+        data: datas,
         resize : true,
         formatter : function (y, data) { return y + ' (' + data.percent + '%)'; }
     });
 
+    var datas = [
+        { label: 'Passed', value: @ViewBag.LowPass, percent: @ViewBag.LowPassPercent, color : "#47a447" },
+        { label: 'Failed', value: @ViewBag.LowFail, percent: @ViewBag.LowFailPercent, color : "#d2322d" },
+        { label: 'Skipped', value: @ViewBag.LowSkip, percent: @ViewBag.LowSkipPercent, color : "#f0ad4e" },
+        { label: 'None', value: @ViewBag.LowNone, percent: @ViewBag.LowNonePercent, color : "#DDDDDD" }
+    ];
+    datas = _.filter(datas, function (data) { return data.value !== 0 });
     Morris.Donut({
         element: 'hero-donut4',
-        data: [
-            { label: 'Passed', value: @ViewBag.LowPass, percent : @ViewBag.LowPassPercent },
-            { label: 'Failed', value: @ViewBag.LowFail, percent : @ViewBag.LowFailPercent },
-            { label: 'Skipped', value: @ViewBag.LowSkip, percent : @ViewBag.LowSkipPercent },
-            { label: 'None', value: @ViewBag.LowNone, percent : @ViewBag.LowNonePercent }
-        ],
-        colors: ["#47a447", "#d2322d", "#f0ad4e", "#DDDDDD"],
+        data: datas,
         resize : true,
         formatter : function (y, data) { return y + ' (' + data.percent + '%)'; }
     });
@@ -283,58 +287,64 @@
     });
 
     //by person by T/H/M/L
+    //have too many on purpose, these are the morris js colors for line graphs
+    var colors = [ '#edc240', '#cb4b4b', '#9440ed', '#0b62a4', '#7A92A3', '#4da74d', '#afd8f8', '#edc240', '#cb4b4b', '#9440ed', '#0b62a4', '#7A92A3', '#4da74d', '#afd8f8'];
     var datas = @Html.Raw(ViewBag.ReadinessByUserByDayByCriticality);
     var testers = _.uniq(_.map(datas, function(data) { return data.TestedBy; }));
-    var totals = _.map(testers, function(tester) {
+    var totals = _.map(testers, function(tester, key) {
         var temp = _.filter(datas, function(data) { return data.TestedBy === tester; });
         var counts = _.map(temp, function(data) { return data.Count; });
         var count = _.reduce(counts, function(memo, num){ return memo + num; }, 0);
-        return  { label : tester, value : count };
+        return  { label : tester, value : count, color: colors[key] };
     });
     totals = _.filter(totals, function (data) { return typeof(data) !== 'undefined';} );
     Morris.Donut({
         element: 'by-person-total',
         data: totals,
-        resize : true
+        resize : true,
+        colors: [ '#3980B5', '#0BA462', '#7a92a3', '#AFD8F8' ]
     });
 
-    var highs = _.map(testers, function(tester) {
+    var highs = _.map(testers, function(tester, key) {
         var temp = _.find(datas, function(data) { return data.Criticality === "High" && data.TestedBy === tester; });
         if (typeof(temp) !== 'undefined'){
-            return  { label : tester, value : temp.Count };
+            return  { label : tester, value : temp.Count, color: colors[key] };
         };
     });
     highs = _.filter(highs, function (data) { return typeof(data) !== 'undefined';} );
     Morris.Donut({
         element: 'by-person-high',
         data: highs,
-        resize : true
+        resize : true,
+        colors: [ '#3980B5', '#0BA462', '#7a92a3', '#AFD8F8' ]
     });
 
-    var mediums = _.map(testers, function(tester) {
+    var mediums = _.map(testers, function(tester, key) {
         var temp = _.find(datas, function(data) { return data.Criticality === "Medium" && data.TestedBy === tester; });
         if (typeof(temp) !== 'undefined'){
-            return  { label : tester, value : temp.Count };
+            return  { label : tester, value : temp.Count, color: colors[key] };
         }
     });
     mediums = _.filter(mediums, function (data) { return typeof(data) !== 'undefined';} );
     Morris.Donut({
         element: 'by-person-medium',
         data: mediums,
-        resize : true
+        resize : true,
+        colors: [ '#3980B5', '#0BA462', '#7a92a3', '#AFD8F8' ]
     });
 
-    var lows = _.map(testers, function(tester) {
+    var lows = _.map(testers, function(tester, key) {
         var temp = _.find(datas, function(data) { return data.Criticality === "Low" && data.TestedBy === tester; });
         if (typeof(temp) !== 'undefined'){
-            return  { label : tester, value : temp.Count };
+            return  { label : tester, value : temp.Count, color: colors[key] };
         }
     });
     lows = _.filter(lows, function (data) { return typeof(data) !== 'undefined';} );
     Morris.Donut({
         element: 'by-person-low',
         data: lows,
-        resize : true
+        resize : true,
+        colors: [ '#3980B5', '#0BA462', '#7a92a3', '#AFD8F8' ]
     });
 
 </script>
