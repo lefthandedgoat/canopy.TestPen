@@ -125,6 +125,7 @@
     <Compile Include="Controllers\CaseController.fs" />
     <Compile Include="Controllers\ReportController.fs" />
     <Compile Include="Controllers\ReadinessController.fs" />
+    <Compile Include="Controllers\HistoryController.fs" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -133,6 +134,7 @@
     <Content Include="Views\Overview\Index.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
     <Content Include="Views\Readiness\Index.cshtml" />
+    <Content Include="Views\History\Index.cshtml" />
     <Content Include="Views\Case\Index.cshtml" />
     <Content Include="Views\Case\Row.cshtml" />
     <None Include="Views\Case\TableHead.cshtml" />

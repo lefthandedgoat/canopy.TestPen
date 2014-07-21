@@ -562,7 +562,7 @@ let getPFSNReadiness run =
     |> List.ofSeq
     
 [<Literal>]
-let private getReadinessRanQuery = """SELECT
+let private getHistoryRanQuery = """SELECT
 r.Date
 ,r.Id
 ,s.Criticality
@@ -572,17 +572,16 @@ JOIN [CanopyTestPen].[dbo].[Runs]as r
 ON s.RunId = r.Id
 WHERE (TestStatus = 'Pass'
 OR TestStatus = 'Fail')
-AND r.Id <= @RunId
 AND r.IsActive = 1
 GROUP BY r.Id, r.Date, s.Criticality
 ORDER BY r.Id DESC"""
 
-type getReadinessRanQuery = SqlCommandProvider<getReadinessRanQuery, "name=TestPen">
+type getHistoryRanQuery = SqlCommandProvider<getHistoryRanQuery, "name=TestPen">
 
-let getReadinessRan runId =
-    let cmd = new getReadinessRanQuery()
+let getHistoryRan () =
+    let cmd = new getHistoryRanQuery()
     let results =
-        cmd.AsyncExecute(RunId = runId)
+        cmd.AsyncExecute()
         |> Async.RunSynchronously
         |> List.ofSeq
         |> List.map (fun result -> 

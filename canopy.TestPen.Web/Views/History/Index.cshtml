@@ -1,0 +1,49 @@
+﻿@using Microsoft.FSharp.Collections
+<div class="content">
+    <div id="pad-wrapper" class="less-padding">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">History
+                    </h4>
+                </div>
+                <div class="panel-collapsed">
+                    <div class="panel-body no-padding-bottom">
+                        <div class="row">
+                            <div class="col-md-12 chart">
+                                <h5>Scenarios Ran Over Time</h5>
+                                <div id="scenarios-ran-over-time"></div>
+                            </div>
+                        </div>
+                        <hr />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+
+        });
+    </script>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="../../js/morris.min.js"></script>
+
+<script type="text/javascript">
+
+    var datas = @Html.Raw(ViewBag.HistoryRanData);
+    Morris.Line({
+        element: 'scenarios-ran-over-time',
+        data: datas,
+        xkey: 'Date',
+        ykeys: ['Total', 'High', 'Medium', 'Low'],
+        labels: ['Total', 'High', 'Medium', 'Low'],
+        resize : true
+    });
+
+</script>
+}
