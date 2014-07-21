@@ -544,6 +544,7 @@ let getRan run =
 /////////////
 //Readiness
 /////////////
+
 [<Literal>]
 let private getPFSNReadinessQuery = """SELECT
 	[Criticality]
@@ -706,3 +707,53 @@ let getRanByUserByDayByCriticality runId =
                 TestedBy = result.TestedBy.Value
                 Criticality = result.Criticality
             } )
+
+/////////////
+//Stories
+/////////////
+
+[<Literal>]
+let private addStoryQuery = """
+INSERT INTO dbo.Stories
+VALUES (@RunId, @Story, @Client, @Team, @Description)
+
+SELECT SCOPE_IDENTITY()"""
+
+type addStoryQuery = SqlCommandProvider<addStoryQuery, "name=TestPen">
+let addStory runId story team client description =
+    let cmd = new addStoryQuery()    
+    let result =
+        cmd.AsyncExecute(RunId = runId, Story = story, Team = team, Client = client, Description = description)
+        |> Async.RunSynchronously
+        |> Seq.head
+    result.Value |> int
+
+[<Literal>]
+let private deleteStoryQuery = """
+DELETE FROM dbo.Stories
+WHERE Id = @Id
+"""
+
+type deleteStoryQuery = SqlCommandProvider<deleteStoryQuery, "name=TestPen">
+let deleteStory id =
+    let cmd = new deleteStoryQuery()    
+    cmd.Execute(Id = id)
+
+[<Literal>]
+let private getStoriesQuery = """SELECT 
+	Id
+    ,Story
+    ,Client
+    ,Team
+    ,Description
+FROM [CanopyTestPen].[dbo].[Stories]
+WHERE RunId = @RunId
+"""
+
+type getStoriesQuery = SqlCommandProvider<getStoriesQuery, "name=TestPen">
+
+let getStories runId =
+    let cmd = new getStoriesQuery()    
+    cmd.AsyncExecute(RunId = runId)
+    |> Async.RunSynchronously
+    |> List.ofSeq

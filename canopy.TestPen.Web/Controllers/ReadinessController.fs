@@ -9,7 +9,12 @@ open Newtonsoft.Json
 type ReadinessController() =
     inherit BaseController()
 
+    member this.AddStory runId story client team description = data.addStory runId story client team description
+
+    member this.DeleteStory id  =  data.deleteStory id
+
     member this.Index (id : int) =
+        this.ViewData?RunId <- id        
         let pfsns = data.getPFSNReadiness id
         
         let get criticality testStatus =
@@ -68,5 +73,6 @@ type ReadinessController() =
         this.ViewData?ReadinessRanByUserByDay <- getRanByUserByDay id |> JsonConvert.SerializeObject 
         this.ViewData?ReadinessByUserByDayByCriticality <- getRanByUserByDayByCriticality id |> JsonConvert.SerializeObject 
         this.ViewData?ReadinessErrors <- getReadinessErrors id
+        this.ViewData?ReadinessStories <- getStories id
 
         this.View()

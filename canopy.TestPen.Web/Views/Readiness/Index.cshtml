@@ -1,5 +1,6 @@
 ﻿@using Microsoft.FSharp.Collections
 <div class="content">
+   <input id="runId" type="hidden" value="@ViewBag.RunId"/>
     <div id="pad-wrapper" class="less-padding">
         <div class="panel-group">
             <div class="panel panel-default">
@@ -9,48 +10,6 @@
                 </div>
                 <div class="panel-collapsed">
                     <div class="panel-body no-padding-bottom">
-@*                        <div class="row">
-                            <div class="col-md-12">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th class="col-md-1">Story
-                                            </th>
-                                            <th class="col-md-5">
-                                                <span class="line"></span>Description
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <button type="button" class="btn btn-xs btn-danger "><i class="icon-remove"></i></button>
-                                                <span class="story">DEFI-123</span>
-                                            </td>
-                                            <td>Pricing Matrix change not updating cache
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <button type="button" class="btn btn-xs btn-danger "><i class="icon-remove"></i></button>
-                                                <span class="story">DEFI-123</span>
-                                            </td>
-                                            <td>Integrate with Daybreak - US Auto
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <button type="button" class="btn btn-xs btn-danger "><i class="icon-remove"></i></button>
-                                                <span class="story">DEFI-123</span>
-                                            </td>
-                                            <td>Add Reference fields to Megasys Legacy - AFS (SOW Signed)
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>*@
-
                         <div class="row">
                             <div class="col-md-3 chart">
                                 <h5>Total</h5>
@@ -91,14 +50,76 @@
                         <hr/>
                         <div class="row">
                             <div class="col-md-12 chart">
-                                <h5>Scenarios Ran By Tester</h5>
+                                <h5>Scenarios Ran by Tester</h5>
                                 <div id="scenarios-ran-over-time-by-tester"></div>
                             </div>
                         </div>
-
                         <hr/>
                         <div class="row">
-                            
+                            <div class="col-md-12">
+                                <h5>Stories this Release</h5>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-md-1">Story
+                                            </th>
+                                            <th class="col-md-1">Client
+                                            </th>
+                                            <th class="col-md-1">Team
+                                            </th>
+                                            <th class="col-md-6">
+                                                <span class="line"></span>Description
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (ListModule.IsEmpty(ViewBag.ReadinessStories))
+                                        {
+                                            <tr>
+                                                <td>None</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            foreach (var story in ViewBag.ReadinessStories)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <button data-id="@story.Id" type="button" class="btn btn-xs btn-danger story-delete"><i class="icon-remove"></i></button>
+                                                        <span class="story">@story.Story</span>
+                                                    </td>
+                                                    <td>@story.Client</td>
+                                                    <td>@story.Team</td>
+                                                    <td>@story.Description</td>
+                                                </tr>
+                                            }
+                                        }
+                                        <tr class="add-story">
+                                            <td class="story-cell">
+                                                <div class="input-group">
+                                                    <span id="story-save" class="input-group-addon"><span class="glyphicon glyphicon-floppy-disk"></span></span>
+                                                    <input id="story-story" type="text" class="form-control" placeholder="Story">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <input id="story-client" class="form-control" placeholder="Client">
+                                            </td>
+                                            <td>
+                                                <input id="story-team" class="form-control" placeholder="Team">
+                                            </td>
+                                            <td>
+                                                <input id="story-description" class="form-control" placeholder="Description">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="row">
                             <div class="col-md-12">
                                 <h5>Failed</h5>
                                 <table class="table table-hover">
@@ -123,32 +144,32 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                       @if (ListModule.IsEmpty(ViewBag.ReadinessErrors))
-                                       {
-                                           <tr class="tr-red-transparent">
-                                               <td>None
-                                               </td>
-                                               <td>
-                                               </td>
-                                               <td>
-                                               </td>
-                                               <td>
-                                               </td>
-                                               <td></td>
-                                               <td></td>
-                                               <td></td>
-                                           </tr>
-                                       }
-                                       else
-                                       {
-                                           foreach (var error in ViewBag.ReadinessErrors)
-                                           {
+                                        @if (ListModule.IsEmpty(ViewBag.ReadinessErrors))
+                                        {
+                                            <tr class="tr-red-transparent">
+                                                <td>None
+                                                </td>
+                                                <td>
+                                                </td>
+                                                <td>
+                                                </td>
+                                                <td>
+                                                </td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            foreach (var error in ViewBag.ReadinessErrors)
+                                            {
                                                 <tr class="tr-red-transparent">
                                                     <td>
-                                                    @if (error.TestedBy != null)
-                                                    {
-                                                        <span>@error.TestedBy.Value</span>
-                                                    }
+                                                        @if (error.TestedBy != null)
+                                                        {
+                                                            <span>@error.TestedBy.Value</span>
+                                                        }
                                                     </td>
                                                     <td>@error.Criticality
                                                     </td>
@@ -164,9 +185,8 @@
                                                     </td>
                                                 </tr>
   
-                                           }
-                                       }
-                                        
+                                            }
+                                        }
                                     </tbody>
                                 </table>
                             </div>
@@ -181,7 +201,38 @@
 {
     <script>
         $(document).ready(function () {
-
+            $("#story-save").click(function() {
+                var row = $(this).closest(".add-story");
+                $.ajax({
+                    type: "POST",
+                    url: '/Readiness/AddStory',
+                    data: {
+                        "runId" : $("#runId").val(),
+                        "story": row.find("#story-story").val(),
+                        "client": row.find("#story-client").val(),
+                        "team": row.find("#story-team").val(),
+                        "description": row.find("#story-description").val()
+                    },
+                    success: function (result) {
+                        row.find("#story-story").val("");
+                        row.find("#story-client").val("");
+                        row.find("#story-team").val("");
+                        row.find("#story-description").val("");
+                    }
+                });
+            });
+            
+            $(".story-delete").click(function() {
+                var row = $(this).closest("tr");
+                $.ajax({
+                    type: "POST",
+                    url: '/Readiness/DeleteStory',
+                    data: { "id" : $(this).data("id") },
+                    success: function (result) {
+                        row.remove();
+                    }
+                });
+            });
         });
     </script>
 
@@ -189,7 +240,6 @@
 <script src="../../js/morris.min.js"></script>
 
 <script type="text/javascript">
-
     // Morris Donut Chart
     var datas = [
         { label: 'Passed', value: @ViewBag.TotalPass, percent: @ViewBag.TotalPassPercent, color: "#47a447" },
