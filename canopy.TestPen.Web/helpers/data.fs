@@ -720,7 +720,7 @@ VALUES (@RunId, @Story, @Client, @Team, @Description)
 SELECT SCOPE_IDENTITY()"""
 
 type addStoryQuery = SqlCommandProvider<addStoryQuery, "name=TestPen">
-let addStory runId story team client description =
+let addStory runId story client team description =
     let cmd = new addStoryQuery()    
     let result =
         cmd.AsyncExecute(RunId = runId, Story = story, Team = team, Client = client, Description = description)
