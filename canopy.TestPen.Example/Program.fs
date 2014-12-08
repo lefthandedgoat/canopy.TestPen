@@ -3,39 +3,55 @@ open System.Net
 open System.IO
 open Newtonsoft.Json
 
+(*
+NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE
+Currently the webpage uses integrated security (thats what im using at work)
+pass the credentials of your local computer in line 15
+*)
+
 let post page =    
     let address = "http://localhost:48213/Api/AddAreas"
     use client = new System.Net.WebClient()
+    client.Credentials <- NetworkCredential("username", "password", "") //last is domain which is blank for me
     let json = JsonConvert.SerializeObject(page)
     client.UploadString(address, json) |> ignore
     
-let tests = 
+let cases = 
     [
         { 
             page = { 
                     area = Area.ThirdParty;
                     section = Section.Integration;
-                    name = "Dealer Track Intergrations" 
+                    name = "Vendor 1 Intergrations" 
             }
-            feature = "Dealer Track Intergrations"
-            description = "Integer fermentum at ipsum vitae pharetra"
-            criticality = High
+            status = Done
+            tShirtSize = XS
+            feature = "Feature 1"
+            bulletPoints = 
+                [
+                    ("Does this work?", Medium) 
+                    ("Does that work??", High)
+                ]
+            description = "Auto Decline are the rules that are defined to decline a request when it fails to meet a prescribed rule"
+            criticality = Critical
             documentation = "http://www.google.com"
             affects = 
                 [
-                    "Vestibulum arcu ligula, faucibus vel volutpat id, facilisis sodales elit"
+                    "Applications With AutoDecline Rule"
+                    "Publish Rules"
                 ]
             configurations = 
                 [
-                    "Proin laoreet dignissim nisl, in euismod lorem cursus vel"
-                    "Morbi justo nulla, facilisis eget elementum sagittis, luctus ac lectus"
+                    "1: Default deploy"
+                    "2: 55 Rules in grid, Add many rows via JavaScript"
+                    "3: Deactive all Auto Decline Rules"
                 ]
             testScenarios = 
                 [
                     {
-                        description = "Scenario 1"
+                        description = "Does this work?"
                         criticality = High
-                        testType = Postive
+                        testType = Positive
                         testExecutionType = TestExecutionType.Manual
                         configuration = 1
                         inputs = ["Test1 asdasf"; "Test2 ffff"]
@@ -49,9 +65,9 @@ let tests =
                         code = Code.None
                     };
                     {
-                        description = "Scenario 2"
+                        description = "Does that work??"
                         criticality = High
-                        testType = Postive
+                        testType = Positive
                         testExecutionType = TestExecutionType.Automated
                         configuration = 1
                         inputs = ["Test1 aaa"; "Test2 bbbb"]
@@ -64,171 +80,62 @@ let tests =
                                 DealType(DealType.RouteOne);
                             ]
                         code = Code.None
-                    };
-                    {
-                        description = "Scenario 3"
-                        criticality = High
-                        testType = Postive
-                        testExecutionType = TestExecutionType.Automated
-                        configuration = 1
-                        inputs = ["Test1 asdf "; "Test2 asdf"]
-                        steps =  [ "STEPS 1"; "STEPS 2" ]
-                        expected = [ "Yada 5"; "Yada 6" ]
-                        attributes = 
-                            [
-                                Workflow(Initial);
-                                Applicant(Individual);
-                                DealType(DealType.RouteOne);
-                            ]
-                        code = Code.None
-                    };
-                    {
-                        description = "Scenario 4"
-                        criticality = High
-                        testType = Postive
-                        testExecutionType = TestExecutionType.Automated
-                        configuration = 1
-                        inputs = ["Test1f "; "Testff2"]
-                        steps =  [ "STEPS 1"; "STEPS 2" ]
-                        expected = [ "Yada 7"; "Yada 8" ]
-                        attributes = 
-                            [
-                                Workflow(Initial);
-                                Applicant(Individual);
-                                DealType(DealType.RouteOne);
-                            ]
-                        code = Code.None
-                    };
-                    {
-                        description = "Scenario 5"
-                        criticality = High
-                        testType = Postive
-                        testExecutionType = TestExecutionType.Bulk
-                        configuration = 1
-                        inputs = ["Testasdf1"; "Testasdasdf2"]
-                        steps =  [ "STEPS 1"; "STEPS 2" ]
-                        expected = [ "Yada 9"; "Yada 10" ]
-                        attributes = 
-                            [
-                                Workflow(Initial);
-                                Applicant(Individual);
-                                DealType(DealType.RouteOne);
-                            ]
-                        code = Code.None
-                    };
-                    {
-                        description = "Scenario 6"
-                        criticality = High
-                        testType = Postive
-                        testExecutionType = TestExecutionType.Bulk
-                        configuration = 1
-                        inputs = ["Testaaa1"; "Testfff2"]
-                        steps =  [ "STEPS 1"; "STEPS 2" ]
-                        expected = [ "Yada 11"; "Yada 12" ]
-                        attributes = 
-                            [
-                                Workflow(Initial);
-                                Applicant(Individual);
-                                DealType(DealType.RouteOne);
-                            ]
-                        code = Code.None
-                    }
+                    };                    
                 ]
-        };
-
+        }
         { 
-            page = {
-                    area = Area.Configuration
-                    section = Section.General
-                    name = "Publish Rules"
+            page = { 
+                    area = Area.ThirdParty;
+                    section = Section.Integration;
+                    name = "Vendor 2 Intergrations" 
             }
-            feature = "Publish Rules"
-            description = "Vestibulum iaculis viverra tellus, nec ullamcorper lorem mattis vel"
-            criticality = Medium
+            status = Done
+            tShirtSize = XS
+            feature = "Feature 2"
+            bulletPoints = 
+                [
+                    ("Does this work?", Medium) 
+                    ("Does that work??", High)
+                ]
+            description = "Auto Decline are the rules that are defined to decline a request when it fails to meet a prescribed rule"
+            criticality = Critical
             documentation = "http://www.google.com"
             affects = 
                 [
-                    "Etiam neque est, eleifend ac erat at, luctus facilisis arcu"
-                    "Cras blandit lectus sit amet odio elementum ultrices eu ac odio"
-                    "Praesent nisi elit, laoreet sit amet porttitor vel, rhoncus vel elit"
+                    "Main page"
+                    "Page 4"
                 ]
             configurations = 
                 [
-                    "Nulla iaculis, nisi id interdum suscipit, turpis purus consequat magna, lobortis commodo purus ligula in elit"
-                    "Donec posuere mauris a tincidunt lacinia"
-                    "Mauris neque neque, interdum tristique tincidunt ut, facilisis non ante"
-                ]
-            testScenarios = 
-                [                    
-                    {
-                        description = "Scenario 2"
-                        criticality = High
-                        testType = Postive
-                        testExecutionType = TestExecutionType.Automated
-                        configuration = 1
-                        inputs = ["Test1"; "Test2"]
-                        steps =  [ "STEPS 1"; "STEPS 2" ]
-                        expected = [ "Yada"; "Yada" ]
-                        attributes = 
-                            [
-                                Workflow(Initial);
-                                Applicant(Individual);
-                                DealType(DealType.RouteOne);
-                            ]
-                        code = Code.None
-                    }
-                ]
-        };
-
-        {
-            page = {
-                    area = Area.Configuration
-                    section = Section.RiskSetup
-                    name = "Usury"
-            }
-            feature = "Usury"
-            description = "Vestibulum nec diam ut tortor vulputate mollis eget ut dolor"
-            criticality = Low
-            documentation = "http://www.google.com"
-            affects = 
-                [
-                    "Suspendisse malesuada faucibus fermentum"
-                    "Cras sed posuere mi, ut pulvinar libero"
-                    "Sed sed venenatis quam, sed tempus tortor"
-                    "Phasellus vitae leo dolor"
-                ]
-            configurations = 
-                [
-                    "Vestibulum scelerisque vel metus porttitor convallis"
+                    "1: Default deploy"
                 ]
             testScenarios = 
                 [
                     {
-                        description = "Scenario 1"
+                        description = "Does this work?"
                         criticality = High
-                        testType = Postive
+                        testType = Positive
                         testExecutionType = TestExecutionType.Manual
                         configuration = 1
-                        inputs = ["Test1"; "Test2"]
+                        inputs = ["Test1 asdasf"; "Test2 ffff"]
                         steps =  [ "STEPS 1"; "STEPS 2" ]
-                        expected = [ "Yada"; "Yada" ]
+                        expected = [ "Yada 1"; "Yada 2" ]
                         attributes = 
                             [
                                 Workflow(Initial);
-                                Applicant(Individual);
                                 DealType(DealType.Manual);
                             ]
                         code = Code.None
                     };
                     {
-                        description = "Scenario 2"
+                        description = "Does that work??"
                         criticality = High
-                        testType = Postive
+                        testType = Positive
                         testExecutionType = TestExecutionType.Automated
                         configuration = 1
-                        inputs = ["Test1"; "Test2"]
+                        inputs = ["Test1 aaa"; "Test2 bbbb"]
                         steps =  [ "STEPS 1"; "STEPS 2" ]
-                        expected = [ "Yada"; "Yada" ]
+                        expected = [ "Yada 3"; "Yada 4" ]
                         attributes = 
                             [
                                 Workflow(Initial);
@@ -236,104 +143,62 @@ let tests =
                                 DealType(DealType.RouteOne);
                             ]
                         code = Code.None
-                    }
+                    };                    
                 ]
-        };
-
-        {
-            page = {
-                    area = Area.Funding
-                    section = Section.Verifications
-                    name = "RIC"
+        }
+        { 
+            page = { 
+                    area = Area.ThirdParty;
+                    section = Section.Integration;
+                    name = "Vendor 3 Intergrations" 
             }
-            feature = "RIC"
-            description = "Fusce nunc turpis, ornare ac nunc a, venenatis porta massa"
-            criticality = High
+            status = Done
+            tShirtSize = XS
+            feature = "Feature 3"
+            bulletPoints = 
+                [
+                    ("Does this work?", Medium) 
+                    ("Does that work??", High)
+                ]
+            description = "Auto Decline are the rules that are defined to decline a request when it fails to meet a prescribed rule"
+            criticality = Critical
             documentation = "http://www.google.com"
             affects = 
                 [
-                    "Nulla gravida massa sit amet neque fringilla, at dapibus dui gravida"
-                    "Aenean id laoreet sem"
-                    "Nam in leo erat"
-                    "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos"
+                    "Applications With AutoDecline Rule"
+                    "Publish Rules"
                 ]
             configurations = 
                 [
-                    "Nulla mollis leo elit, et facilisis orci varius rutrum"
-                    "Nulla gravida massa sit amet neque fringilla, at dapibus dui gravida"
+                    "1: Default deploy"
                 ]
             testScenarios = 
                 [
                     {
-                        description = "Scenario 2"
+                        description = "Does this work?"
                         criticality = High
-                        testType = Postive
-                        testExecutionType = TestExecutionType.Automated
-                        configuration = 1
-                        inputs = ["Test1"; "Test2" ]
-                        steps =  [ "STEPS 1"; "STEPS 2" ]
-                        expected = [ "Yada"; "Yada" ]
-                        attributes = 
-                            [
-                                Workflow(Initial);
-                                Applicant(Individual);
-                                DealType(DealType.RouteOne);
-                            ]
-                        code = Code.None
-                    }
-                ]
-        };
-
-        {
-            page = {
-                    area = Area.Reports
-                    section = Section.Notifications
-                    name = "Report"
-            }
-            feature = "Report"
-            description = "Fusce nunc turpis, ornare ac nunc a, venenatis porta massa"
-            criticality = High
-            documentation = "http://www.google.com"
-            affects = 
-                [
-                    "Nulla gravida massa sit amet neque fringilla, at dapibus dui gravida"
-                    "Aenean id laoreet sem"
-                    "Nam in leo erat"
-                    "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos"
-                ]
-            configurations = 
-                [
-                    "Nulla mollis leo elit, et facilisis orci varius rutrum"
-                    "Nulla gravida massa sit amet neque fringilla, at dapibus dui gravida"
-                ]
-            testScenarios = 
-                [
-                    {
-                        description = "Scenario 1"
-                        criticality = High
-                        testType = Postive
+                        testType = Positive
                         testExecutionType = TestExecutionType.Manual
                         configuration = 1
-                        inputs = ["Test1"; "Test2"]
+                        inputs = ["Test1 asdasf"; "Test2 ffff"]
                         steps =  [ "STEPS 1"; "STEPS 2" ]
-                        expected = [ "Yada"; "Yada" ]
+                        expected = [ "Yada 1"; "Yada 2" ]
                         attributes = 
                             [
                                 Workflow(Initial);
-                                Applicant(Individual);
                                 DealType(DealType.Manual);
                             ]
                         code = Code.None
                     };
                     {
-                        description = "Scenario 2"
+                        description = "Does that work??"
                         criticality = High
-                        testType = Postive
+                        testType = Positive
                         testExecutionType = TestExecutionType.Automated
                         configuration = 1
-                        inputs = ["Test1"; "Test2"]
+                        inputs = ["Test1 aaa"; "Test2 bbbb"]
                         steps =  [ "STEPS 1"; "STEPS 2" ]
-                        expected = [ "Yada"; "Yada" ]
+                        expected = [ "Yada 3"; "Yada 4" ]
                         attributes = 
                             [
                                 Workflow(Initial);
@@ -341,9 +206,9 @@ let tests =
                                 DealType(DealType.RouteOne);
                             ]
                         code = Code.None
-                    }
+                    };                    
                 ]
         };
     ]
 
-post tests
+post { cases = cases; reportResults = caseReporting.generate cases }

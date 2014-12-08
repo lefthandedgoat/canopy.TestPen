@@ -3,9 +3,10 @@
 open System.Runtime.Serialization
 
 let NotApplicable = []
+let TODO_SetMeToSomeNotApplicableOrARealListOfValues = []
 
 type TestType =
-    | Postive
+    | Positive
     | Negative
     | Boundary
     | Exception
@@ -34,6 +35,7 @@ type Code =
     | None
     
 type Criticality =
+    | Critical
     | High
     | Medium
     | Low
@@ -54,49 +56,45 @@ type TestExecutionType =
 type Area =
     | ThirdParty
     | Configuration
-    | Funding
     | Manual
     | Queues
-    | Reports
-    | Underwriting
-    | Wizard
-    | Workflows
+    | Reports    
     | None
-
+    
 type Section =
     | Integration
     | Configuration
     | General
-    | Applications
     | Tables
     | Notifications
-    | Verifications
-    | RiskSetup
-    | Structure
-    | Decisions
-    | PageConfigurations
     | Security
     | ThirdParty
-    | Dealers
-    | Queues
-    | Lease
-    | LeasingWorkflow
     | Reporting
-    | AppEntry
-    | Application
     | Wizard
-    | UnderwritingWorkflow
-    | FunderWorkflow
-    | NewAppWorkflowDT
-    | NewAppWorkflowR1
-    | NewAppWorkflowMAN
-    | PaymentCallWorkflow
+    | Signup
     | None
 
 type Attribute =
     | Workflow of Workflow
     | Applicant of Applicant
     | DealType of DealType
+
+type Status =
+    | Ready
+    | Bullet
+    | TestCase
+    | Automation
+    | Done
+    | None
+
+type TShirtSize =
+    | XS
+    | S
+    | M
+    | L
+    | XL
+    | XXL
+    | None
 
 [<CLIMutable>]
 type TestScenario = {
@@ -122,6 +120,9 @@ type Page = {
 [<CLIMutable>]
 type TestCase = {
     page: Page
+    bulletPoints: (string * Criticality) list
+    status : Status
+    tShirtSize : TShirtSize
     feature: string
     description: string
     criticality: Criticality
@@ -129,4 +130,17 @@ type TestCase = {
     configurations: string list
     testScenarios: TestScenario list
     documentation: string
+}
+
+[<CLIMutable>]
+type reportResult = {
+    id : int
+    label : string
+    count : int 
+}
+
+[<CLIMutable>]
+type ToTestPen = {
+    cases: TestCase list
+    reportResults: reportResult list
 }
