@@ -1,17 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "canopy.TestPen.Web", "canopy.TestPen.Web\canopy.TestPen.Web.fsproj", "{C82E713B-366F-4FC5-8B79-A9767A08D743}"
-	ProjectSection(ProjectDependencies) = postProject
-		{D489C6E2-6979-46EF-A193-AD8EE484A28B} = {D489C6E2-6979-46EF-A193-AD8EE484A28B}
-	EndProjectSection
-EndProject
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{ED0A00B7-DAC7-448C-8B19-6BB43E326849}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "canopy.TestPen.Web", "canopy.TestPen.Web\canopy.TestPen.Web.fsproj", "{C82E713B-366F-4FC5-8B79-A9767A08D743}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D489C6E2-6979-46EF-A193-AD8EE484A28B} = {D489C6E2-6979-46EF-A193-AD8EE484A28B}
 	EndProjectSection
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "canopy.TestPen", "canopy.TestPen\canopy.TestPen.fsproj", "{D489C6E2-6979-46EF-A193-AD8EE484A28B}"

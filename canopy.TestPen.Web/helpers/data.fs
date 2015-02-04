@@ -313,6 +313,45 @@ let unclaim id =
     let cmd = new unclaimQuery()
     cmd.Execute(Id = id)
 
+[<Literal>]
+let private passScenarioQuery = """
+  UPDATE scenario
+  SET TestStatus = 'Pass'
+  FROM Scenarios AS scenario
+  JOIN Cases AS cases
+  ON scenario.CaseId = cases.Id
+  JOIN Pages as pages
+  ON cases.PageId = pages.Id
+  WHERE pages.Area = @Area
+  AND pages.Section = @Section
+  AND pages.Name = @Name
+  AND scenario.[Description] = @Description
+  AND scenario.RunId = @RunId"""
+  
+type PassScenariosQuery = SqlCommandProvider<passScenarioQuery, "name=TestPen">
+
+let passScenario run area section name description =
+    let cmd = new PassScenariosQuery()    
+    cmd.Execute(RunId = run, Area = area, Section = section, Name = name, Description = description) |> ignore
+
+[<Literal>]
+let private claimCaseQuery = """
+  UPDATE cases
+  SET [ClaimedBy] = @User  
+  FROM Cases AS cases  
+  JOIN Pages as pages
+  ON cases.PageId = pages.Id
+  WHERE pages.Area = @Area
+  AND pages.Section = @Section
+  AND pages.Name = @Name
+  AND cases.RunId = @RunId"""
+  
+type ClaimCaseQuery = SqlCommandProvider<claimCaseQuery, "name=TestPen">
+
+let claimCase run area section name user =
+    let cmd = new ClaimCaseQuery()    
+    cmd.Execute(RunId = run, Area = area, Section = section, Name = name, User = user) |> ignore
+
 /////////////
 //Inputs
 /////////////
