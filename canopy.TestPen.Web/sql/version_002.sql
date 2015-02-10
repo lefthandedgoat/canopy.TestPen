@@ -11,6 +11,7 @@ GO
 CREATE TABLE [dbo].[Stories](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[RunId] [int] NOT NULL,
+	[Story] [nvarchar](100) NOT NULL,
 	[Client] [nvarchar](100) NOT NULL,
 	[Team] [nvarchar](100) NOT NULL,
 	[Description] [nvarchar](2000) NOT NULL
