@@ -16,6 +16,19 @@ type ApiController() =
         let reader = new StreamReader(strea)
         reader.ReadToEnd()
 
+    member this.PassTests () : JsonResult =
+        let latestRun = data.getRuns() |> List.head
+        let tests = read this |> PassedTests.Parse
+        tests |> Array.iter(fun test -> data.passScenario latestRun.Id test.Area.Case test.Section.Case test.Name test.TestName)
+        this.Json(String.Empty, JsonRequestBehavior.AllowGet)
+
+    member this.ClaimCases () : JsonResult =
+        let latestRun = data.getRuns() |> List.head
+        let tests = read this |> PassedTests.Parse
+        let user = this.user
+        tests |> Array.iter(fun test -> data.claimCase latestRun.Id test.Area.Case test.Section.Case test.Name user)
+        this.Json(String.Empty, JsonRequestBehavior.AllowGet)
+
     member this.AddAreas () : JsonResult =
         let run = data.addRun()
         
