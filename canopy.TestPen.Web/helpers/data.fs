@@ -316,7 +316,9 @@ let unclaim id =
 [<Literal>]
 let private passScenarioQuery = """
   UPDATE scenario
-  SET TestStatus = 'Pass'
+  SET TestStatus = 'Pass',
+  TestedBy = @User,
+  UpdateDate = getdate()
   FROM Scenarios AS scenario
   JOIN Cases AS cases
   ON scenario.CaseId = cases.Id
@@ -330,9 +332,9 @@ let private passScenarioQuery = """
   
 type PassScenariosQuery = SqlCommandProvider<passScenarioQuery, "name=TestPen">
 
-let passScenario run area section name description =
+let passScenario run area section name description user =
     let cmd = new PassScenariosQuery()    
-    cmd.Execute(RunId = run, Area = area, Section = section, Name = name, Description = description) |> ignore
+    cmd.Execute(RunId = run, Area = area, Section = section, Name = name, Description = description, User = user) |> ignore
 
 [<Literal>]
 let private claimCaseQuery = """

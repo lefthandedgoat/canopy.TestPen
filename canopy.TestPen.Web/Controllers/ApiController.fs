@@ -19,7 +19,7 @@ type ApiController() =
     member this.PassTests () : JsonResult =
         let latestRun = data.getRuns() |> List.head
         let tests = read this |> PassedTests.Parse
-        tests |> Array.iter(fun test -> data.passScenario latestRun.Id test.Area.Case test.Section.Case test.Name test.TestName)
+        tests |> Array.iter(fun test -> data.passScenario latestRun.Id test.Area.Case test.Section.Case test.Name test.TestName this.user)
         this.Json(String.Empty, JsonRequestBehavior.AllowGet)
 
     member this.ClaimCases () : JsonResult =
