@@ -567,7 +567,7 @@ let getReports run =
 
 [<Literal>]
 let private getRanQuery = """SELECT count(*)
-FROM [CanopyTestPen].[dbo].[Scenarios]
+FROM [dbo].[Scenarios]
 WHERE RunId = @RunId
 AND TestStatus IN ('Pass', 'Fail')"""
 
@@ -591,7 +591,7 @@ let private getPFSNReadinessQuery = """SELECT
 	[Criticality]
     ,[TestStatus]
 	,COUNT(*) as cnt
-FROM [CanopyTestPen].[dbo].[Scenarios]
+FROM [dbo].[Scenarios]
 WHERE RunId = @RunId
 GROUP BY Criticality, TestStatus"""
 
@@ -609,8 +609,8 @@ r.Date
 ,r.Id
 ,s.Criticality
 ,COUNT(*) as cnt
-FROM [CanopyTestPen].[dbo].[Scenarios] as s
-JOIN [CanopyTestPen].[dbo].[Runs]as r
+FROM [dbo].[Scenarios] as s
+JOIN [dbo].[Runs]as r
 ON s.RunId = r.Id
 WHERE (TestStatus = 'Pass'
 OR TestStatus = 'Fail')
@@ -660,10 +660,10 @@ let private getReadinessErrorsQuery = """SELECT
 	,Name
 	,s.[Description]    
     ,ISNULL([Comment],'') as Comment
-FROM [CanopyTestPen].[dbo].[Scenarios] as s
-JOIN [CanopyTestPen].[dbo].[Cases] as c
+FROM [dbo].[Scenarios] as s
+JOIN [dbo].[Cases] as c
 ON s.CaseId = c.Id
-JOIN [CanopyTestPen].[dbo].[Pages] as p
+JOIN [dbo].[Pages] as p
 ON c.PageId = p.Id
 WHERE s.RunId = @RunId
 AND TestStatus = 'Fail'
@@ -684,8 +684,8 @@ CAST(s.UpdateDate AS DATE) as UpdateDate
 ,r.Id
 ,s.TestedBy
 ,COUNT(*) as cnt
-FROM [CanopyTestPen].[dbo].[Scenarios] as s
-JOIN [CanopyTestPen].[dbo].[Runs]as r
+FROM [dbo].[Scenarios] as s
+JOIN [dbo].[Runs]as r
 ON s.RunId = r.Id
 WHERE (TestStatus = 'Pass'
 OR TestStatus = 'Fail')
@@ -720,8 +720,8 @@ r.Id
 ,s.TestedBy
 ,s.Criticality
 ,COUNT(*) as cnt
-FROM [CanopyTestPen].[dbo].[Scenarios] as s
-JOIN [CanopyTestPen].[dbo].[Runs]as r
+FROM [dbo].[Scenarios] as s
+JOIN [dbo].[Runs]as r
 ON s.RunId = r.Id
 WHERE (TestStatus = 'Pass'
 OR TestStatus = 'Fail')
@@ -787,7 +787,7 @@ let private getStoriesQuery = """SELECT
     ,Client
     ,Team
     ,Description
-FROM [CanopyTestPen].[dbo].[Stories]
+FROM [dbo].[Stories]
 WHERE RunId = @RunId
 """
 
